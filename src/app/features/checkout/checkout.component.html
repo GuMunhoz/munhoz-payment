@@ -1,0 +1,66 @@
+<div class="checkout-page bg-light py-4 py-md-5">
+  <div class="container-xl">
+    <!-- Stepper Top Bar -->
+    <div class="mb-4">
+      <app-stepper [currentStep]="2"></app-stepper>
+    </div>
+
+    <!-- Processing State View (if processing) -->
+    @if (isProcessing()) {
+      <div class="row justify-content-center my-4">
+        <div class="col-lg-6 col-md-8">
+          <div class="card p-4 p-md-5 text-center shadow-sm">
+            <div class="spinner-wrapper mb-3">
+              <output class="spinner-border text-primary spinner-lg">
+                <span class="visually-hidden">Processando...</span>
+              </output>
+            </div>
+            <h2 class="h4 fw-bold mb-2">Processando seu pagamento</h2>
+            <p class="text-muted small mb-4">
+              Estamos aguardando a confirmação. Isso pode levar alguns segundos.
+            </p>
+
+            <div class="processing-order-box p-3 rounded mb-4 text-start">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <div class="nexo-mini-badge">
+                  <i class="bi bi-grid-fill"></i>
+                </div>
+                <div>
+                  <div class="fw-semibold small">{{ product()?.name || 'Nexo Pro' }}</div>
+                  <div class="text-muted text-xs">
+                    {{ product()?.billingPeriod || 'Plano mensal' }} · {{ product()?.usersCount || 1 }} {{ (product()?.usersCount || 1) > 1 ? 'usuários' : 'usuário' }}
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-between align-items-center text-sm pt-2 border-top">
+                <span class="fw-semibold">Total</span>
+                <span class="fw-bold fs-6">{{ product()?.price | currency:(product()?.currency || 'BRL'):'symbol':'1.2-2' }}</span>
+              </div>
+            </div>
+
+            <div class="alert alert-light border small text-muted text-start d-flex align-items-center gap-2 mb-0">
+              <i class="bi bi-info-circle text-primary fs-5"></i>
+              <span><strong>Aguarde a confirmação:</strong> Não feche ou atualize esta janela até o pagamento finalizar.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <!-- Standard Checkout Grid -->
+      <div class="row g-4 checkout-grid">
+        <!-- Coluna de Formas de Pagamento (esquerda no desktop, abaixo no mobile) -->
+        <div class="col-lg-7 order-2 order-lg-1">
+          <app-payment-methods
+            [product]="product()"
+            (paymentSubmit)="handlePaymentSubmit($event)"
+          ></app-payment-methods>
+        </div>
+
+        <!-- Coluna do Resumo do Pedido (direita no desktop, topo no mobile) -->
+        <div class="col-lg-5 order-1 order-lg-2">
+          <app-order-summary [product]="product()"></app-order-summary>
+        </div>
+      </div>
+    }
+  </div>
+</div>

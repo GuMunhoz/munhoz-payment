@@ -1,0 +1,44 @@
+.home-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 180px);
+  padding: 2rem 1rem;
+}
+
+.banner-card {
+  max-width: 680px;
+  width: 100%;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border-subtle);
+  background: linear-gradient(180deg, #ffffff 0%, #fbfbfe 100%);
+  box-shadow: var(--shadow-lg);
+}
+
+.badge-nexo {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: var(--font-size-xs);
+  border-radius: var(--radius-full);
+}
+
+.banner-desc {
+  max-width: 480px;
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+}
+
+.banner-btn {
+  font-size: var(--font-size-lg);
+  border-radius: var(--radius-lg);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.banner-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md) !important;
+}

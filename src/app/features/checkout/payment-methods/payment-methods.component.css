@@ -1,0 +1,51 @@
+.section-title {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-main);
+}
+
+.main-payment-card {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-subtle);
+  background: var(--color-bg-surface);
+}
+
+/* Method Tabs */
+.payment-tabs .method-tab-btn {
+  border: 1.5px solid var(--color-border-default);
+  background-color: var(--color-bg-surface);
+  color: var(--color-text-muted);
+  border-radius: var(--radius-md);
+  padding: 12px 8px;
+  transition: all 0.2s ease-in-out;
+}
+
+.payment-tabs .method-tab-btn:hover {
+  border-color: var(--color-primary-border);
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.payment-tabs .method-tab-btn.active {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.card-brands .badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 4px 8px;
+}
+
+
+/* Pix styling */
+.pix-qr-wrapper {
+  max-width: 180px;
+}
+
+.pix-qr-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}

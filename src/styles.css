@@ -1,1 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
+@import './styles/variables.css';
+@import './styles/design-pattern.css';
+
+/* Global base styles */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-bg-page);
+  color: var(--color-text-main);
+  font-family: var(--font-family-base);
+  -webkit-font-smoothing: antialiased;
+}

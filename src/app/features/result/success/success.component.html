@@ -1,0 +1,99 @@
+<div class="result-page py-4">
+  <!-- Stepper (All 3 steps complete) -->
+  <app-stepper [currentStep]="3" state="success"></app-stepper>
+
+  <div class="container-xl mt-3">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-8 col-12">
+        <div class="card p-4 p-md-5 text-center shadow-sm result-card">
+          <!-- Success Icon Circle -->
+          <div class="success-icon-wrapper mx-auto mb-3">
+            <i class="bi bi-check-lg"></i>
+          </div>
+
+          <!-- Main Title -->
+          <h1 class="h3 fw-bold mb-2">Pagamento confirmado!</h1>
+          <p class="text-muted small mb-3">
+            Tudo certo, Maria. Sua assinatura está ativa e seu espaço já está pronto para você.
+          </p>
+
+          <!-- Active badge -->
+          <div class="mb-4">
+            <span class="badge active-badge py-2 px-3 fw-semibold">
+              <i class="bi bi-check-circle-fill me-1"></i> Assinatura ativa
+            </span>
+          </div>
+
+          <!-- Receipt Details Card -->
+          <div class="receipt-box p-3 p-md-4 rounded mb-4 text-start">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <div class="nexo-logo-box">
+                <i class="bi bi-grid-fill"></i>
+              </div>
+              <div>
+                <h6 class="fw-bold mb-0">{{ product()?.name || 'Nexo Pro' }}</h6>
+                <div class="text-muted text-xs">
+                  {{ product()?.billingPeriod || 'Plano mensal' }} · {{ product()?.usersCount || 1 }} {{ (product()?.usersCount || 1) > 1 ? 'usuários' : 'usuário' }}
+                </div>
+              </div>
+            </div>
+
+            <hr class="my-3" />
+
+            <div class="receipt-row d-flex justify-content-between text-sm mb-2">
+              <span class="text-muted">Pedido:</span>
+              <span class="fw-medium text-dark">{{ successData()?.orderNumber || '#NX-98432' }}</span>
+            </div>
+
+            <div class="receipt-row d-flex justify-content-between text-sm mb-2">
+              <span class="text-muted">Pagamento:</span>
+              <span class="fw-medium text-dark">{{ getMethodFormatted() }}</span>
+            </div>
+
+            <div class="receipt-row d-flex justify-content-between text-sm mb-3">
+              <span class="text-muted">Data:</span>
+              <span class="fw-medium text-dark">{{ successData()?.paidAt }}</span>
+            </div>
+
+            <hr class="my-2" />
+
+            <div class="receipt-row d-flex justify-content-between align-items-baseline pt-2">
+              <span class="fw-bold fs-6">Total pago</span>
+              <span class="fw-bold fs-4 text-dark">{{ (successData()?.amount || product()?.price || 79.9) | currency:(product()?.currency || 'BRL'):'symbol':'1.2-2' }}</span>
+            </div>
+          </div>
+
+          <!-- Email notification info -->
+          <div class="text-muted text-xs mb-4">
+            Enviamos o recibo para <strong class="text-dark">{{ successData()?.customerEmail || 'maria.almeida@exemplo.com' }}</strong>
+          </div>
+
+          <!-- Action buttons -->
+          <div class="d-flex flex-column flex-sm-row justify-content-center gap-2 mb-4">
+            <button
+              type="button"
+              class="btn btn-primary px-4 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2"
+              (click)="goToHome()"
+            >
+              <i class="bi bi-box-arrow-in-right"></i>
+              <span>Acessar meu espaço</span>
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-secondary px-4 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2"
+              (click)="viewReceipt()"
+            >
+              <i class="bi bi-receipt"></i>
+              <span>Ver recibo</span>
+            </button>
+          </div>
+
+          <!-- Next renewal note -->
+          <div class="text-muted text-xs">
+            Sua próxima renovação será em {{ successData()?.nextRenewalDate || '15/11/2026' }}.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

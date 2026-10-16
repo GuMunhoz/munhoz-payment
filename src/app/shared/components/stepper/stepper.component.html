@@ -1,0 +1,45 @@
+<div class="stepper-wrapper">
+  <!-- Step 1: Produto -->
+  <div class="step-item step-completed">
+    <div class="step-indicator">
+      <i class="bi bi-check-lg"></i>
+    </div>
+    <span class="step-label">Produto</span>
+  </div>
+
+  <div class="step-line" [class.line-completed]="currentStep >= 2"></div>
+
+  <!-- Step 2: Pagamento -->
+  <div
+    class="step-item"
+    [class.step-completed]="state === 'success'"
+    [class.step-active]="state !== 'success' && currentStep === 2"
+  >
+    <div class="step-indicator">
+      @if (state === 'success') {
+        <i class="bi bi-check-lg"></i>
+      } @else {
+        <span class="step-number">2</span>
+      }
+    </div>
+    <span class="step-label">Pagamento</span>
+  </div>
+
+  <div class="step-line" [class.line-completed]="state === 'success'"></div>
+
+  <!-- Step 3: Confirmação -->
+  <div
+    class="step-item"
+    [class.step-completed]="state === 'success'"
+    [class.step-pending]="state !== 'success'"
+  >
+    <div class="step-indicator">
+      @if (state === 'success') {
+        <i class="bi bi-check-lg"></i>
+      } @else {
+        <span class="step-number">3</span>
+      }
+    </div>
+    <span class="step-label">Confirmação</span>
+  </div>
+</div>

@@ -1,0 +1,301 @@
+<div class="card p-4 shadow-sm main-payment-card">
+  <h5 class="fw-bold mb-3 section-title">Como você quer pagar?</h5>
+
+  <!-- Payment Method Tabs -->
+  <div class="row g-2 mb-4 payment-tabs">
+    <!-- Crédito -->
+    <div class="col-4">
+      <button
+        type="button"
+        class="btn method-tab-btn w-100"
+        [class.active]="selectedMethod() === 'credit'"
+        (click)="selectMethod('credit')"
+      >
+        <i class="bi bi-credit-card-2-front fs-5 mb-1 d-block"></i>
+        <span class="small fw-semibold">Crédito</span>
+      </button>
+    </div>
+
+    <!-- Débito -->
+    <div class="col-4">
+      <button
+        type="button"
+        class="btn method-tab-btn w-100"
+        [class.active]="selectedMethod() === 'debit'"
+        (click)="selectMethod('debit')"
+      >
+        <i class="bi bi-credit-card fs-5 mb-1 d-block"></i>
+        <span class="small fw-semibold">Débito</span>
+      </button>
+    </div>
+
+    <!-- Pix -->
+    <div class="col-4">
+      <button
+        type="button"
+        class="btn method-tab-btn w-100"
+        [class.active]="selectedMethod() === 'pix'"
+        (click)="selectMethod('pix')"
+      >
+        <i class="bi bi-qr-code fs-5 mb-1 d-block"></i>
+        <span class="small fw-semibold">Pix</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Content for Credit or Debit Card -->
+  @if (selectedMethod() === 'credit' || selectedMethod() === 'debit') {
+    <div class="card-method-header d-flex justify-content-between align-items-center mb-3">
+      <span class="fw-semibold small text-muted">
+        {{ selectedMethod() === 'credit' ? 'Cartão de crédito' : 'Cartão de débito' }}
+      </span>
+      <div class="card-brands d-flex gap-2">
+        <span class="badge bg-light text-muted border">Visa</span>
+        <span class="badge bg-light text-muted border">Mastercard</span>
+        <span class="badge bg-light text-muted border">Elo</span>
+      </div>
+    </div>
+
+    <form [formGroup]="cardForm" (ngSubmit)="onSubmit()" novalidate>
+      <!-- Card Number -->
+      <div class="mb-3">
+        <label class="form-label small fw-semibold" for="cardNumber">Número do cartão</label>
+        <div class="input-group">
+          <input
+            type="text"
+            id="cardNumber"
+            class="form-control"
+            [class.is-invalid]="isFieldInvalid('number')"
+            formControlName="number"
+            placeholder="4242 4242 4242 4242"
+            appCardMask="cardNumber"
+            maxlength="23"
+          />
+          <span class="input-group-text bg-white text-muted">
+            <i class="bi bi-credit-card"></i>
+          </span>
+        </div>
+        @if (isFieldInvalid('number')) {
+          <div class="invalid-feedback d-block small">
+            {{ f['number'].errors?.['luhn']?.message || 'Informe um número de cartão válido.' }}
+          </div>
+        }
+      </div>
+
+      <!-- Holder Name -->
+      <div class="mb-3">
+        <label class="form-label small fw-semibold" for="holderName">Nome no cartão</label>
+        <input
+          type="text"
+          id="holderName"
+          class="form-control text-uppercase"
+          [class.is-invalid]="isFieldInvalid('holderName')"
+          formControlName="holderName"
+          placeholder="MARIA A ALMEIDA"
+        />
+        @if (isFieldInvalid('holderName')) {
+          <div class="invalid-feedback d-block small">
+            {{ f['holderName'].errors?.['cardHolder']?.message || 'Informe nome e sobrenome como no cartão.' }}
+          </div>
+        }
+      </div>
+
+      <!-- Expiration and CVV Row -->
+      <div class="row g-3 mb-3">
+        <div class="col-6">
+          <label class="form-label small fw-semibold" for="expiration">Validade</label>
+          <input
+            type="text"
+            id="expiration"
+            class="form-control"
+            [class.is-invalid]="isFieldInvalid('expiration')"
+            formControlName="expiration"
+            placeholder="12/28"
+            appCardMask="expiration"
+            maxlength="5"
+          />
+          @if (isFieldInvalid('expiration')) {
+            <div class="invalid-feedback d-block small">
+              {{ f['expiration'].errors?.['expired']?.message || f['expiration'].errors?.['expiration']?.message || 'Validade inválida.' }}
+            </div>
+          }
+        </div>
+
+        <div class="col-6">
+          <label class="form-label small fw-semibold" for="cvv">CVV</label>
+          <div class="input-group">
+            <input
+              type="password"
+              id="cvv"
+              class="form-control"
+              [class.is-invalid]="isFieldInvalid('cvv')"
+              formControlName="cvv"
+              placeholder="123"
+              appCardMask="cvv"
+              maxlength="4"
+            />
+            <span class="input-group-text bg-white text-muted">
+              <i class="bi bi-lock-fill"></i>
+            </span>
+          </div>
+          @if (isFieldInvalid('cvv')) {
+            <div class="invalid-feedback d-block small">
+              {{ f['cvv'].errors?.['cvv']?.message || 'Use 3 ou 4 dígitos.' }}
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Installments (Crédito only) -->
+      @if (selectedMethod() === 'credit') {
+        <div class="mb-3">
+          <label class="form-label small fw-semibold" for="installments">Parcelamento</label>
+          <select id="installments" class="form-select" formControlName="installments">
+            @for (item of installmentsList(); track item.count) {
+              <option [value]="item.count">{{ item.label }}</option>
+            }
+          </select>
+        </div>
+      }
+
+      <!-- Save Card Checkbox -->
+      <div class="form-check mb-4">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="saveCard"
+          formControlName="saveCard"
+        />
+        <label class="form-check-label small text-muted" for="saveCard">
+          Salvar dados para compras futuras
+        </label>
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="btn btn-primary w-100 py-3 fw-semibold d-flex align-items-center justify-content-center gap-2 mb-2"
+      >
+        <i class="bi bi-shield-lock-fill"></i>
+        <span>Pagar {{ (product?.price || 79.9) | currency:(product?.currency || 'BRL'):'symbol':'1.2-2' }}</span>
+      </button>
+
+      <!-- Legal notice -->
+      <div class="text-center text-xs text-muted mb-2">
+        Ao confirmar, você concorda com os Termos de serviço e a Política de privacidade.
+      </div>
+
+      <!-- Debit specific note -->
+      @if (selectedMethod() === 'debit') {
+        <div class="alert alert-light border small text-muted d-flex align-items-center gap-2 mt-3 mb-0">
+          <i class="bi bi-info-circle text-primary"></i>
+          <span>Pagamentos com cartão de débito podem exigir confirmação no app do seu banco.</span>
+        </div>
+      }
+    </form>
+  }
+
+  <!-- Content for Pix -->
+  @if (selectedMethod() === 'pix') {
+    <div class="pix-panel text-center py-2">
+      <div class="pix-header text-start mb-3">
+        <h6 class="fw-bold mb-1">Pague com Pix e seja aprovado na hora</h6>
+        <p class="text-muted small mb-0">
+          Abra o app do seu banco e leia o QR Code ou copie o código abaixo. Depois, conclua o pagamento.
+        </p>
+      </div>
+
+      <!-- Simulated QR Code SVG -->
+      <div class="pix-qr-wrapper p-3 d-inline-block bg-white rounded border shadow-sm my-3">
+        <svg
+          class="pix-qr-svg"
+          viewBox="0 0 160 160"
+          width="160"
+          height="160"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <!-- Background -->
+          <rect width="160" height="160" fill="white" />
+          <!-- Positioning squares -->
+          <rect x="10" y="10" width="40" height="40" fill="#0f172a" rx="4" />
+          <rect x="18" y="18" width="24" height="24" fill="white" rx="2" />
+          <rect x="24" y="24" width="12" height="12" fill="#0f172a" rx="1" />
+
+          <rect x="110" y="10" width="40" height="40" fill="#0f172a" rx="4" />
+          <rect x="118" y="18" width="24" height="24" fill="white" rx="2" />
+          <rect x="124" y="24" width="12" height="12" fill="#0f172a" rx="1" />
+
+          <rect x="10" y="110" width="40" height="40" fill="#0f172a" rx="4" />
+          <rect x="18" y="118" width="24" height="24" fill="white" rx="2" />
+          <rect x="24" y="124" width="12" height="12" fill="#0f172a" rx="1" />
+
+          <!-- Decorative mock data dots -->
+          <rect x="60" y="15" width="8" height="8" fill="#4f46e5" />
+          <rect x="75" y="25" width="8" height="8" fill="#0f172a" />
+          <rect x="90" y="15" width="8" height="8" fill="#0f172a" />
+          <rect x="65" y="45" width="8" height="8" fill="#0f172a" />
+          <rect x="80" y="55" width="12" height="8" fill="#4f46e5" />
+          <rect x="60" y="70" width="10" height="10" fill="#0f172a" />
+          <rect x="80" y="80" width="8" height="8" fill="#0f172a" />
+          <rect x="95" y="70" width="8" height="8" fill="#4f46e5" />
+          <rect x="115" y="65" width="8" height="8" fill="#0f172a" />
+          <rect x="135" y="75" width="8" height="8" fill="#0f172a" />
+          <rect x="65" y="105" width="8" height="8" fill="#0f172a" />
+          <rect x="85" y="115" width="12" height="8" fill="#0f172a" />
+          <rect x="110" y="105" width="8" height="8" fill="#4f46e5" />
+          <rect x="125" y="120" width="8" height="8" fill="#0f172a" />
+          <rect x="140" y="135" width="8" height="8" fill="#0f172a" />
+          <rect x="75" y="135" width="8" height="8" fill="#0f172a" />
+        </svg>
+      </div>
+      <div class="text-xs text-muted mb-3">QR Code simulado · sem valor de pagamento</div>
+
+      <!-- Copy & Paste Input -->
+      <div class="mb-3 text-start">
+        <label class="form-label small fw-semibold text-muted" for="pixCode">Pix copia e cola:</label>
+        <div class="input-group">
+          <input
+            type="text"
+            id="pixCode"
+            class="form-control font-monospace text-xs"
+            [value]="simulatedPixCode"
+            readonly
+          />
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="copyPixCode()"
+            title="Copiar código"
+          >
+            <i class="bi" [ngClass]="pixCopied() ? 'bi-check-lg text-success' : 'bi-copy'"></i>
+          </button>
+        </div>
+        @if (pixCopied()) {
+          <div class="text-success text-xs mt-1">
+            <i class="bi bi-check-circle me-1"></i> Código Pix copiado para a área de transferência!
+          </div>
+        }
+      </div>
+
+      <!-- Copy Button Large -->
+      <button
+        type="button"
+        class="btn btn-outline-secondary w-100 py-2 mb-3 fw-semibold small d-flex align-items-center justify-content-center gap-2"
+        (click)="copyPixCode()"
+      >
+        <i class="bi bi-copy"></i>
+        <span>{{ pixCopied() ? 'Código copiado!' : 'Copiar código Pix' }}</span>
+      </button>
+
+      <!-- Complete Pix Payment -->
+      <button
+        type="button"
+        class="btn btn-primary w-100 py-3 fw-semibold d-flex align-items-center justify-content-center gap-2"
+        (click)="onSubmit()"
+      >
+        <i class="bi bi-check2-circle fs-5"></i>
+        <span>Concluir pagamento</span>
+      </button>
+    </div>
+  }
+</div>

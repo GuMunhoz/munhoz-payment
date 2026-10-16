@@ -1,0 +1,103 @@
+<div class="result-page py-4">
+  <!-- Stepper (Step 2 Alert/Active) -->
+  <app-stepper [currentStep]="2" state="error"></app-stepper>
+
+  <div class="container-xl mt-3">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-8 col-12">
+        <div class="card p-4 p-md-5 text-center shadow-sm result-card">
+          <!-- Error Icon Circle -->
+          <div class="error-icon-wrapper mx-auto mb-3">
+            <i class="bi bi-exclamation-lg"></i>
+          </div>
+
+          <!-- Main Title -->
+          <h1 class="h3 fw-bold mb-2">Não foi possível concluir o pagamento</h1>
+          <p class="text-muted small mb-4">
+            Não se preocupe, nenhuma cobrança foi realizada e seu pedido continua reservado.
+          </p>
+
+          <!-- Error Alert Callout -->
+          <div class="error-alert-box p-3 rounded mb-4 text-start">
+            <div class="d-flex align-items-start gap-2">
+              <i class="bi bi-x-circle-fill text-danger fs-5 mt-1"></i>
+              <div>
+                <strong class="d-block text-danger">{{ errorData()?.title || 'Cartão não autorizado' }}</strong>
+                <p class="mb-0 text-muted small mt-1">
+                  {{ errorData()?.message || 'Seu banco recusou a transação. Confirme os dados e o limite disponível, ou use outro meio de pagamento.' }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Order details summary -->
+          <div class="receipt-box p-3 p-md-4 rounded mb-4 text-start">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <div class="nexo-logo-box">
+                <i class="bi bi-grid-fill"></i>
+              </div>
+              <div>
+                <h6 class="fw-bold mb-0">{{ product()?.name || 'Nexo Pro' }}</h6>
+                <div class="text-muted text-xs">
+                  {{ product()?.billingPeriod || 'Plano mensal' }} · {{ product()?.usersCount || 1 }} {{ (product()?.usersCount || 1) > 1 ? 'usuários' : 'usuário' }}
+                </div>
+              </div>
+            </div>
+
+            <hr class="my-3" />
+
+            <div class="receipt-row d-flex justify-content-between text-sm mb-2">
+              <span class="text-muted">Pedido:</span>
+              <span class="fw-medium text-dark">{{ errorData()?.orderNumber || '#NX-98432' }}</span>
+            </div>
+
+            <div class="receipt-row d-flex justify-content-between text-sm mb-3">
+              <span class="text-muted">Meio usado:</span>
+              <span class="fw-medium text-dark">{{ getMethodFormatted() }}</span>
+            </div>
+
+            <hr class="my-2" />
+
+            <div class="receipt-row d-flex justify-content-between align-items-baseline pt-2">
+              <span class="fw-bold fs-6">Total a pagar</span>
+              <span class="fw-bold fs-4 text-dark">{{ (errorData()?.amount || product()?.price || 79.9) | currency:(product()?.currency || 'BRL'):'symbol':'1.2-2' }}</span>
+            </div>
+          </div>
+
+          <!-- Action buttons -->
+          <div class="d-flex flex-column flex-sm-row justify-content-center gap-2 mb-3">
+            <button
+              type="button"
+              class="btn btn-primary px-4 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2"
+              (click)="retry()"
+            >
+              <i class="bi bi-arrow-clockwise"></i>
+              <span>Tentar novamente</span>
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-secondary px-4 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2"
+              (click)="chooseAnotherMethod()"
+            >
+              <i class="bi bi-wallet2"></i>
+              <span>Escolher outro meio</span>
+            </button>
+          </div>
+
+          <!-- Helper tip -->
+          <div class="text-muted text-xs mb-4">
+            Você pode pagar com outro cartão ou escolher Pix.
+          </div>
+
+          <!-- Support link -->
+          <div class="pt-2 border-top">
+            <a href="javascript:void(0)" class="small text-muted d-inline-flex align-items-center gap-1">
+              <i class="bi bi-chat-dots"></i>
+              <span>Ainda precisa de ajuda? Fale com a gente</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
