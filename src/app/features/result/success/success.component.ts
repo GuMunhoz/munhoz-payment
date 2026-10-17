@@ -20,21 +20,19 @@ export class SuccessComponent {
 
   getMethodFormatted(): string {
     const data = this.successData();
-    if (!data) return 'Cartão de crédito';
+    if (!data) return '';
 
     if (data.method === 'pix') {
       return 'Pix · À vista';
     }
 
     const typeLabel = data.method === 'credit' ? 'Crédito' : 'Débito';
-    const brand = data.cardBrand || 'Visa';
-    const last4 = data.cardLast4 || '4242';
     const installmentsText =
       data.method === 'credit' && data.installments && data.installments > 1
         ? ` · ${data.installments}x`
         : '';
 
-    return `${typeLabel} · ${brand} •••• ${last4}${installmentsText}`;
+    return `${typeLabel} · ${data.cardBrand} •••• ${data.cardLast4}${installmentsText}`;
   }
 
   goToHome(): void {

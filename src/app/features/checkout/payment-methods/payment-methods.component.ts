@@ -17,25 +17,16 @@ import {
   Validators
 } from '@angular/forms';
 import {
+  InstallmentOption,
   PaymentCardDetails,
   PaymentMethod,
+  PaymentSubmitPayload,
   Product
 } from '../../../core/models/payment.models';
 import { PaymentStateService } from '../../../core/services/payment-state/payment-state.service';
 import { CardMaskDirective } from '../../../shared/directives/card-mask.directive';
+import { generateInstallments } from '../../../shared/utils/payment.utils';
 import { CardValidators } from '../../../shared/validators/card.validators';
-
-export interface PaymentSubmitPayload {
-  method: PaymentMethod;
-  card?: PaymentCardDetails;
-  pixCode?: string;
-}
-
-export interface InstallmentOption {
-  count: number;
-  label: string;
-  amount: number;
-}
 
 @Component({
   selector: 'app-payment-methods',
@@ -63,13 +54,13 @@ export class PaymentMethodsComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.buildForm();
     if (this.product?.price) {
-      this.generateInstallments(this.product.price);
+      this.installmentsList.set(generateInstallments(this.product.price));
     }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['product'] && this.product?.price) {
-      this.generateInstallments(this.product.price);
+      this.installmentsList.set(generateInstallments(this.product.price));
     }
   }
 
@@ -77,22 +68,10 @@ export class PaymentMethodsComponent implements OnInit, OnChanges {
     const savedCard = this.paymentState.cardData();
 
     this.cardForm = this.fb.group({
-      number: [
-        savedCard?.number || '',
-        [Validators.required, CardValidators.luhn()]
-      ],
-      holderName: [
-        savedCard?.holderName || '',
-        [Validators.required, CardValidators.cardHolder()]
-      ],
-      expiration: [
-        savedCard?.expiration || '',
-        [Validators.required, CardValidators.expiration()]
-      ],
-      cvv: [
-        savedCard?.cvv || '',
-        [Validators.required, CardValidators.cvv()]
-      ],
+      number: [ savedCard?.number || '', [Validators.required, CardValidators.luhn()]],
+      holderName: [ savedCard?.holderName || '',[Validators.required, CardValidators.cardHolder()]],
+      expiration: [ savedCard?.expiration || '',[Validators.required, CardValidators.expiration()]],
+      cvv: [ savedCard?.cvv || '',[Validators.required, CardValidators.cvv()]],
       installments: [savedCard?.installments || 1],
       saveCard: [true]
     });
@@ -102,34 +81,15 @@ export class PaymentMethodsComponent implements OnInit, OnChanges {
     }
   }
 
-  generateInstallments(price: number): void {
-    const options: InstallmentOption[] = [];
-    for (let i = 1; i <= 12; i++) {
-      const val = (price / i).toFixed(2).replace('.', ',');
-      options.push({
-        count: i,
-        amount: price / i,
-        label: `${i}x de R$ ${val} sem juros`
-      });
-    }
-    this.installmentsList.set(options);
-  }
-
   selectMethod(method: PaymentMethod): void {
     this.selectedMethod.set(method);
     this.paymentState.setMethod(method);
   }
 
-  copyPixCode(): void {
-    navigator.clipboard
-      .writeText(this.simulatedPixCode)
-      .then(() => {
-        this.pixCopied.set(true);
-        setTimeout(() => this.pixCopied.set(false), 3000);
-      })
-      .catch(() => {
-        // Fallback caso permissão de clipboard seja negada
-      });
+  async copyPixCode(): Promise<void> {
+    await navigator.clipboard.writeText(this.simulatedPixCode);
+    this.pixCopied.set(true);
+    setTimeout(() => this.pixCopied.set(false), 3000);
   }
 
   onSubmit(): void {
@@ -161,10 +121,6 @@ export class PaymentMethodsComponent implements OnInit, OnChanges {
       card: cardValues,
       pixCode: this.selectedMethod() === 'pix' ? this.simulatedPixCode : undefined
     });
-  }
-
-  get f() {
-    return this.cardForm.controls;
   }
 
   isFieldInvalid(fieldName: string): boolean {

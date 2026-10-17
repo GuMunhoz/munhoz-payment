@@ -15,7 +15,13 @@
 
     <!-- Panel popup / modal -->
     @if (isOpen()) {
-      <div class="simulator-backdrop" (click)="toggleOpen()"></div>
+      <button
+        type="button"
+        class="simulator-backdrop"
+        tabindex="-1"
+        aria-label="Fechar simulador"
+        (click)="toggleOpen()"
+      ></button>
       <div class="simulator-popover card shadow-lg animate-pop">
         <div class="card-header d-flex justify-content-between align-items-center py-2 px-3 bg-white">
           <div class="d-flex align-items-center">
@@ -31,7 +37,8 @@
           </p>
 
           <!-- Mode selector buttons -->
-          <div class="btn-group w-100 mb-3" role="group">
+          <fieldset class="btn-group w-100 mb-3">
+            <legend class="visually-hidden">Resultado simulado do pagamento</legend>
             <button
               type="button"
               class="btn btn-sm"
@@ -48,61 +55,15 @@
             >
               <i class="bi bi-x-circle-fill me-1"></i> Erro
             </button>
-            <button
-              type="button"
-              class="btn btn-sm"
-              [ngClass]="state().mode === 'random' ? 'btn-primary text-white' : 'btn-outline-secondary'"
-              (click)="setMode('random')"
-            >
-              <i class="bi bi-shuffle me-1"></i> Aleatório
-            </button>
-          </div>
+          </fieldset>
 
-          <!-- Error reason selector (if mode === 'error') -->
           @if (state().mode === 'error') {
-            <div class="error-reason-box p-2 mb-3 rounded border">
-              <label class="form-label text-muted small fw-semibold mb-2">Motivo da falha simulada:</label>
-              <div class="d-flex flex-column gap-1">
-                <div class="form-check small">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    id="err-declined"
-                    name="errorReason"
-                    [checked]="state().errorReason === 'declined'"
-                    (change)="setErrorReason('declined')"
-                  />
-                  <label class="form-check-label" for="err-declined">
-                    <strong>Cartão não autorizado</strong> (recusado pelo banco)
-                  </label>
-                </div>
-                <div class="form-check small">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    id="err-funds"
-                    name="errorReason"
-                    [checked]="state().errorReason === 'insufficient_funds'"
-                    (change)="setErrorReason('insufficient_funds')"
-                  />
-                  <label class="form-check-label" for="err-funds">
-                    <strong>Saldo insuficiente</strong>
-                  </label>
-                </div>
-                <div class="form-check small">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    id="err-timeout"
-                    name="errorReason"
-                    [checked]="state().errorReason === 'timeout'"
-                    (change)="setErrorReason('timeout')"
-                  />
-                  <label class="form-check-label" for="err-timeout">
-                    <strong>Falha de comunicação</strong> (timeout)
-                  </label>
-                </div>
-              </div>
+            <div class="error-reason-box p-2 mb-3 rounded border small">
+              <div class="text-muted fw-semibold mb-1">Comportamento da falha simulada:</div>
+              <ul class="mb-0 ps-3 text-muted">
+                <li><strong>Crédito ou Pix:</strong> Pagamento recusado</li>
+                <li><strong>Débito:</strong> Saldo insuficiente</li>
+              </ul>
             </div>
           }
 

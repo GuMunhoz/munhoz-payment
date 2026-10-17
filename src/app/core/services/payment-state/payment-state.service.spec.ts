@@ -24,7 +24,6 @@ describe('PaymentStateService', () => {
     paidAt: '15/10/2026, 17:30',
     method: 'credit',
     amount: 79.9,
-    customerEmail: 'maria@exemplo.com',
     nextRenewalDate: '15/11/2026'
   };
 

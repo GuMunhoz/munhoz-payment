@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { ErrorReason, SimulatorMode } from '../../core/models/payment.models';
+import { SimulatorMode } from '../../core/models/payment.models';
 import { PaymentStateService } from '../../core/services/payment-state/payment-state.service';
 import {
   resetSimulator,
-  setSimulatorErrorReason,
   setSimulatorMode,
   simulatorState
 } from '../../mocks/mock-payment.handler';
@@ -32,10 +31,6 @@ export class SimulatorPanelComponent {
     setSimulatorMode(mode);
   }
 
-  setErrorReason(reason: ErrorReason): void {
-    setSimulatorErrorReason(reason);
-  }
-
   resetAll(): void {
     resetSimulator();
     this.paymentState.reset();
@@ -43,18 +38,10 @@ export class SimulatorPanelComponent {
   }
 
   getModeBadgeLabel(): string {
-    const s = this.state();
-    if (s.mode === 'success') return 'Sucesso';
-    if (s.mode === 'random') return 'Aleatório';
-    if (s.errorReason === 'insufficient_funds') return 'Erro (Saldo)';
-    if (s.errorReason === 'timeout') return 'Erro (Timeout)';
-    return 'Erro (Recusado)';
+    return this.state().mode === 'success' ? 'Sucesso' : 'Erro';
   }
 
   getModeBadgeClass(): string {
-    const s = this.state();
-    if (s.mode === 'success') return 'badge-success-mode';
-    if (s.mode === 'random') return 'badge-random-mode';
-    return 'badge-error-mode';
+    return this.state().mode === 'success' ? 'badge-success-mode' : 'badge-error-mode';
   }
 }

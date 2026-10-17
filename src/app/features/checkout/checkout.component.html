@@ -26,15 +26,15 @@
                   <i class="bi bi-grid-fill"></i>
                 </div>
                 <div>
-                  <div class="fw-semibold small">{{ product()?.name || 'Nexo Pro' }}</div>
+                  <div class="fw-semibold small">{{ product()?.name }}</div>
                   <div class="text-muted text-xs">
-                    {{ product()?.billingPeriod || 'Plano mensal' }} · {{ product()?.usersCount || 1 }} {{ (product()?.usersCount || 1) > 1 ? 'usuários' : 'usuário' }}
+                    {{ product()?.billingPeriod }} · {{ userCountText() }}
                   </div>
                 </div>
               </div>
               <div class="d-flex justify-content-between align-items-center text-sm pt-2 border-top">
                 <span class="fw-semibold">Total</span>
-                <span class="fw-bold fs-6">{{ product()?.price | currency:(product()?.currency || 'BRL'):'symbol':'1.2-2' }}</span>
+                <span class="fw-bold fs-6">{{ product()?.price | currency:product()?.currency:'symbol':'1.2-2' }}</span>
               </div>
             </div>
 

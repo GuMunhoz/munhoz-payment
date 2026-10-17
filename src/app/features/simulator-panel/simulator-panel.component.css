@@ -31,17 +31,15 @@
   color: var(--color-text-inverse);
 }
 
-.badge-random-mode {
-  background-color: var(--color-primary);
-  color: var(--color-text-inverse);
-}
-
 .simulator-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
+  padding: 0;
+  border: 0;
+  cursor: default;
   z-index: 10000;
   background: rgba(15, 23, 42, 0.25);
   backdrop-filter: blur(2px);

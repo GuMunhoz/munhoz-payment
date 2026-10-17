@@ -22,9 +22,9 @@
             <div class="d-flex align-items-start gap-2">
               <i class="bi bi-x-circle-fill text-danger fs-5 mt-1"></i>
               <div>
-                <strong class="d-block text-danger">{{ errorData()?.title || 'Cartão não autorizado' }}</strong>
+                <strong class="d-block text-danger">{{ errorData()?.title }}</strong>
                 <p class="mb-0 text-muted small mt-1">
-                  {{ errorData()?.message || 'Seu banco recusou a transação. Confirme os dados e o limite disponível, ou use outro meio de pagamento.' }}
+                  {{ errorData()?.message }}
                 </p>
               </div>
             </div>
@@ -48,7 +48,7 @@
 
             <div class="receipt-row d-flex justify-content-between text-sm mb-2">
               <span class="text-muted">Pedido:</span>
-              <span class="fw-medium text-dark">{{ errorData()?.orderNumber || '#NX-98432' }}</span>
+              <span class="fw-medium text-dark">{{ errorData()?.orderNumber }}</span>
             </div>
 
             <div class="receipt-row d-flex justify-content-between text-sm mb-3">
@@ -60,7 +60,7 @@
 
             <div class="receipt-row d-flex justify-content-between align-items-baseline pt-2">
               <span class="fw-bold fs-6">Total a pagar</span>
-              <span class="fw-bold fs-4 text-dark">{{ (errorData()?.amount || product()?.price || 79.9) | currency:(product()?.currency || 'BRL'):'symbol':'1.2-2' }}</span>
+              <span class="fw-bold fs-4 text-dark">{{ errorData()?.amount | currency:(product()?.currency || 'BRL'):'symbol':'1.2-2' }}</span>
             </div>
           </div>
 

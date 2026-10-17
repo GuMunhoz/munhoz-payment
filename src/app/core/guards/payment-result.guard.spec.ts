@@ -44,7 +44,6 @@ describe('PaymentResultGuards', () => {
         paidAt: 'now',
         method: 'credit',
         amount: 79.9,
-        customerEmail: 'a@b.com',
         nextRenewalDate: 'next'
       });
 

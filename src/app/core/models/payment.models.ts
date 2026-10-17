@@ -1,8 +1,8 @@
 export type PaymentMethod = 'credit' | 'debit' | 'pix';
 
-export type SimulatorMode = 'success' | 'error' | 'random';
+export type SimulatorMode = 'success' | 'error';
 
-export type ErrorReason = 'declined' | 'insufficient_funds' | 'timeout';
+export type ErrorReason = 'declined' | 'insufficient_funds';
 
 export type PaymentStatus = 'idle' | 'processing' | 'success' | 'error';
 
@@ -26,6 +26,18 @@ export interface PaymentCardDetails {
   cvv: string;
   installments: number;
   saveCard?: boolean;
+}
+
+export interface PaymentSubmitPayload {
+  method: PaymentMethod;
+  card?: PaymentCardDetails;
+  pixCode?: string;
+}
+
+export interface InstallmentOption {
+  count: number;
+  label: string;
+  amount: number;
 }
 
 export interface PaymentRequest {
@@ -52,7 +64,7 @@ export interface PaymentSuccessResponse {
   installments?: number;
   cardLast4?: string;
   cardBrand?: string;
-  customerEmail: string;
+  customerName?: string;
   nextRenewalDate: string;
 }
 
@@ -71,7 +83,6 @@ export interface PaymentErrorResponse {
 
 export interface SimulatorState {
   mode: SimulatorMode;
-  errorReason: ErrorReason;
 }
 
 export interface PersistedState {

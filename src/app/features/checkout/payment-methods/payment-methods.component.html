@@ -77,7 +77,7 @@
         </div>
         @if (isFieldInvalid('number')) {
           <div class="invalid-feedback d-block small">
-            {{ f['number'].errors?.['luhn']?.message || 'Informe um número de cartão válido.' }}
+            {{ cardForm.controls['number'].errors?.['luhn']?.message || 'Informe um número de cartão válido.' }}
           </div>
         }
       </div>
@@ -95,7 +95,7 @@
         />
         @if (isFieldInvalid('holderName')) {
           <div class="invalid-feedback d-block small">
-            {{ f['holderName'].errors?.['cardHolder']?.message || 'Informe nome e sobrenome como no cartão.' }}
+            {{ cardForm.controls['holderName'].errors?.['cardHolder']?.message || 'Informe nome e sobrenome como no cartão.' }}
           </div>
         }
       </div>
@@ -116,7 +116,7 @@
           />
           @if (isFieldInvalid('expiration')) {
             <div class="invalid-feedback d-block small">
-              {{ f['expiration'].errors?.['expired']?.message || f['expiration'].errors?.['expiration']?.message || 'Validade inválida.' }}
+              {{ cardForm.controls['expiration'].errors?.['expired']?.message || cardForm.controls['expiration'].errors?.['expiration']?.message || 'Validade inválida.' }}
             </div>
           }
         </div>
@@ -140,7 +140,7 @@
           </div>
           @if (isFieldInvalid('cvv')) {
             <div class="invalid-feedback d-block small">
-              {{ f['cvv'].errors?.['cvv']?.message || 'Use 3 ou 4 dígitos.' }}
+              {{ cardForm.controls['cvv'].errors?.['cvv']?.message || 'Digite os 3 dígitos.' }}
             </div>
           }
         </div>
@@ -177,7 +177,7 @@
         class="btn btn-primary w-100 py-3 fw-semibold d-flex align-items-center justify-content-center gap-2 mb-2"
       >
         <i class="bi bi-shield-lock-fill"></i>
-        <span>Pagar {{ (product?.price || 79.9) | currency:(product?.currency || 'BRL'):'symbol':'1.2-2' }}</span>
+        <span>Pagar {{ product?.price | currency:product?.currency:'symbol':'1.2-2' }}</span>
       </button>
 
       <!-- Legal notice -->

@@ -13,7 +13,7 @@ describe('OrderSummaryComponent', () => {
 
     fixture = TestBed.createComponent(OrderSummaryComponent);
     component = fixture.componentInstance;
-    component.product = {
+    fixture.componentRef.setInput('product', {
       id: 'nexo-pro',
       name: 'Nexo Pro',
       price: 79.9,
@@ -23,7 +23,7 @@ describe('OrderSummaryComponent', () => {
       summary: 'Resumo',
       features: ['Acesso a todos recursos', 'Relatórios e automações'],
       renewalText: 'Renovação mensal.'
-    };
+    });
     fixture.detectChanges();
   });
 
@@ -31,14 +31,18 @@ describe('OrderSummaryComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should pluralize user count correctly', () => {
-    expect(component.getUserCountText()).toBe('1 usuário');
+  it('should pluralize user count correctly using computed signal', () => {
+    expect(component.userCountText()).toBe('1 usuário');
+    expect(fixture.nativeElement.textContent).toContain('1 usuário');
 
-    component.product = {
-      ...component.product!,
+    fixture.componentRef.setInput('product', {
+      ...component.product()!,
       usersCount: 3
-    };
-    expect(component.getUserCountText()).toBe('3 usuários');
+    });
+    fixture.detectChanges();
+
+    expect(component.userCountText()).toBe('3 usuários');
+    expect(fixture.nativeElement.textContent).toContain('3 usuários');
   });
 
   it('should render both mobile and desktop views with responsive classes', () => {

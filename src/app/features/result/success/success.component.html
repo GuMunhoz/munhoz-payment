@@ -14,7 +14,7 @@
           <!-- Main Title -->
           <h1 class="h3 fw-bold mb-2">Pagamento confirmado!</h1>
           <p class="text-muted small mb-3">
-            Tudo certo, Maria. Sua assinatura está ativa e seu espaço já está pronto para você.
+            Tudo certo{{ successData()?.customerName ? ', ' + successData()?.customerName : '' }}. Sua assinatura está ativa e seu espaço já está pronto para você.
           </p>
 
           <!-- Active badge -->
@@ -31,9 +31,9 @@
                 <i class="bi bi-grid-fill"></i>
               </div>
               <div>
-                <h6 class="fw-bold mb-0">{{ product()?.name || 'Nexo Pro' }}</h6>
+                <h6 class="fw-bold mb-0">{{ product()?.name }}</h6>
                 <div class="text-muted text-xs">
-                  {{ product()?.billingPeriod || 'Plano mensal' }} · {{ product()?.usersCount || 1 }} {{ (product()?.usersCount || 1) > 1 ? 'usuários' : 'usuário' }}
+                  {{ product()?.billingPeriod }} · {{ product()?.usersCount }} {{ product()?.usersCount === 1 ? 'usuário' : 'usuários' }}
                 </div>
               </div>
             </div>
@@ -42,7 +42,7 @@
 
             <div class="receipt-row d-flex justify-content-between text-sm mb-2">
               <span class="text-muted">Pedido:</span>
-              <span class="fw-medium text-dark">{{ successData()?.orderNumber || '#NX-98432' }}</span>
+              <span class="fw-medium text-dark">{{ successData()?.orderNumber }}</span>
             </div>
 
             <div class="receipt-row d-flex justify-content-between text-sm mb-2">
@@ -59,13 +59,8 @@
 
             <div class="receipt-row d-flex justify-content-between align-items-baseline pt-2">
               <span class="fw-bold fs-6">Total pago</span>
-              <span class="fw-bold fs-4 text-dark">{{ (successData()?.amount || product()?.price || 79.9) | currency:(product()?.currency || 'BRL'):'symbol':'1.2-2' }}</span>
+              <span class="fw-bold fs-4 text-dark">{{ successData()?.amount | currency:(product()?.currency || 'BRL'):'symbol':'1.2-2' }}</span>
             </div>
-          </div>
-
-          <!-- Email notification info -->
-          <div class="text-muted text-xs mb-4">
-            Enviamos o recibo para <strong class="text-dark">{{ successData()?.customerEmail || 'maria.almeida@exemplo.com' }}</strong>
           </div>
 
           <!-- Action buttons -->
@@ -90,7 +85,7 @@
 
           <!-- Next renewal note -->
           <div class="text-muted text-xs">
-            Sua próxima renovação será em {{ successData()?.nextRenewalDate || '15/11/2026' }}.
+            Sua próxima renovação será em {{ successData()?.nextRenewalDate }}.
           </div>
         </div>
       </div>

@@ -1,19 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   PaymentErrorResponse,
   PaymentRequest,
+  PaymentSubmitPayload,
   PaymentSuccessResponse,
   Product
 } from '../../core/models/payment.models';
 import { PaymentService } from '../../core/services/payment/payment.service';
 import { PaymentStateService } from '../../core/services/payment-state/payment-state.service';
 import { StepperComponent } from '../../shared/components/stepper/stepper.component';
-import {
-  PaymentMethodsComponent,
-  PaymentSubmitPayload
-} from './payment-methods/payment-methods.component';
+import { PaymentMethodsComponent } from './payment-methods/payment-methods.component';
 import { OrderSummaryComponent } from './order-summary/order-summary.component';
 
 @Component({
@@ -36,6 +34,11 @@ export class CheckoutComponent implements OnInit {
   readonly product = signal<Product | null>(null);
   readonly isLoadingProduct = signal(true);
   readonly isProcessing = signal(false);
+
+  readonly userCountText = computed(() => {
+    const count = this.product()?.usersCount || 1;
+    return `${count} ${count > 1 ? 'usuários' : 'usuário'}`;
+  });
 
   ngOnInit(): void {
     this.loadProduct();

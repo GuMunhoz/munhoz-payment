@@ -20,17 +20,13 @@ export class ErrorComponent {
 
   getMethodFormatted(): string {
     const data = this.errorData();
-    if (!data) return 'Cartão de crédito';
+    if (!data) return '';
 
-    if (data.method === 'pix') {
-      return 'Pix';
-    }
+    if (data.method === 'pix') return 'Pix';
 
     const typeLabel = data.method === 'credit' ? 'Crédito' : 'Débito';
-    const brand = data.cardBrand || 'Visa';
-    const last4 = data.cardLast4 || '4242';
 
-    return `${typeLabel} · ${brand} •••• ${last4}`;
+    return `${typeLabel} · ${data.cardBrand} •••• ${data.cardLast4}`;
   }
 
   retry(): void {

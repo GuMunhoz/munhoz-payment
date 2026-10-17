@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { Product } from '../../../core/models/payment.models';
 
 @Component({
@@ -10,10 +10,10 @@ import { Product } from '../../../core/models/payment.models';
   styleUrl: './order-summary.component.css'
 })
 export class OrderSummaryComponent {
-  @Input() product: Product | null = null;
+  readonly product = input<Product | null>(null);
 
-  getUserCountText(): string {
-    const count = this.product?.usersCount || 1;
+  readonly userCountText = computed(() => {
+    const count = this.product()?.usersCount || 1;
     return `${count} ${count > 1 ? 'usuários' : 'usuário'}`;
-  }
+  });
 }
