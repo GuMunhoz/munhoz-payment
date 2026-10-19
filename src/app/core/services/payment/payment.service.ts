@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, delay, of, throwError } from 'rxjs';
+import { Observable, delay, mergeMap, of, throwError, timer } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { PaymentRequest, PaymentSuccessResponse, Product } from '../../models/payment.models';
 import { handleMockPayment } from '../../../mocks/mock-payment.handler';
@@ -27,13 +27,18 @@ export class PaymentService {
       if (outcome.success) {
         return of(outcome.response).pipe(delay(1200));
       } else {
-        return throwError(() =>
-          new HttpErrorResponse({
-            status: 402,
-            statusText: 'Payment Required',
-            error: outcome.error
-          })
-        ).pipe(delay(1200));
+        return timer(1200).pipe(
+          mergeMap(() =>
+            throwError(
+              () =>
+                new HttpErrorResponse({
+                  status: 402,
+                  statusText: 'Payment Required',
+                  error: outcome.error
+                })
+            )
+          )
+        );
       }
     }
 

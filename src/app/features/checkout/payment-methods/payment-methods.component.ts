@@ -25,7 +25,7 @@ import {
 } from '../../../core/models/payment.models';
 import { PaymentStateService } from '../../../core/services/payment-state/payment-state.service';
 import { CardMaskDirective } from '../../../shared/directives/card-mask.directive';
-import { generateInstallments } from '../../../shared/utils/payment.utils';
+import { detectCardBrand, generateInstallments } from '../../../shared/utils/payment.utils';
 import { CardValidators } from '../../../shared/validators/card.validators';
 
 @Component({
@@ -65,25 +65,37 @@ export class PaymentMethodsComponent implements OnInit, OnChanges {
   }
 
   private buildForm(): void {
-    const savedCard = this.paymentState.cardData();
-
-    this.cardForm = this.fb.group({
-      number: [ savedCard?.number || '', [Validators.required, CardValidators.luhn()]],
-      holderName: [ savedCard?.holderName || '',[Validators.required, CardValidators.cardHolder()]],
-      expiration: [ savedCard?.expiration || '',[Validators.required, CardValidators.expiration()]],
-      cvv: [ savedCard?.cvv || '',[Validators.required, CardValidators.cvv()]],
-      installments: [savedCard?.installments || 1],
-      saveCard: [true]
-    });
-
     if (this.paymentState.method()) {
       this.selectedMethod.set(this.paymentState.method());
     }
+
+    const savedCard = this.paymentState.getCardData(this.selectedMethod());
+
+    this.cardForm = this.fb.group({
+      number: [savedCard?.number || '', [Validators.required, CardValidators.luhn()]],
+      holderName: [savedCard?.holderName || '', [Validators.required, CardValidators.cardHolder()]],
+      expiration: [savedCard?.expiration || '', [Validators.required, CardValidators.expiration()]],
+      cvv: ['', [Validators.required, CardValidators.cvv()]],
+      installments: [savedCard?.installments || 1],
+      saveCard: [savedCard?.saveCard ?? true]
+    });
   }
 
   selectMethod(method: PaymentMethod): void {
     this.selectedMethod.set(method);
     this.paymentState.setMethod(method);
+
+    if (method !== 'pix') {
+      const savedCard = this.paymentState.getCardData(method);
+      this.cardForm.reset({
+        number: savedCard?.number || '',
+        holderName: savedCard?.holderName || '',
+        expiration: savedCard?.expiration || '',
+        cvv: '',
+        installments: savedCard?.installments || 1,
+        saveCard: savedCard?.saveCard ?? true
+      });
+    }
   }
 
   async copyPixCode(): Promise<void> {
@@ -126,5 +138,9 @@ export class PaymentMethodsComponent implements OnInit, OnChanges {
   isFieldInvalid(fieldName: string): boolean {
     const field = this.cardForm.get(fieldName);
     return !!(field && field.invalid && (field.dirty || field.touched));
+  }
+
+  get detectedBrand(): string | null {
+    return detectCardBrand(this.cardForm?.get('number')?.value);
   }
 }

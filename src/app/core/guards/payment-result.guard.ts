@@ -6,20 +6,12 @@ export const successGuard: CanActivateFn = () => {
   const paymentState = inject(PaymentStateService);
   const router = inject(Router);
 
-  if (paymentState.isSuccess()) {
-    return true;
-  }
-
-  return router.createUrlTree(['/pagamento']);
+  return paymentState.status() === 'success' || router.createUrlTree(['/pagamento']);
 };
 
 export const errorGuard: CanActivateFn = () => {
   const paymentState = inject(PaymentStateService);
   const router = inject(Router);
 
-  if (paymentState.isError()) {
-    return true;
-  }
-
-  return router.createUrlTree(['/pagamento']);
+  return paymentState.status() === 'error' || router.createUrlTree(['/pagamento']);
 };

@@ -49,19 +49,21 @@ describe('CardValidators', () => {
   });
 
   describe('cvv', () => {
-    it('should accept 3 or 4 digits', () => {
+    it('should accept 3 digits', () => {
       const validator = CardValidators.cvv();
       expect(validator(new FormControl('123'))).toBeNull();
-      expect(validator(new FormControl('1234'))).toBeNull();
     });
 
     it('should reject letters or wrong length', () => {
       const validator = CardValidators.cvv();
       expect(validator(new FormControl('12'))).toEqual({
-        cvv: { message: 'CVV deve ter 3 ou 4 dígitos' }
+        cvv: { message: 'CVV deve ter 3 dígitos' }
+      });
+      expect(validator(new FormControl('1234'))).toEqual({
+        cvv: { message: 'CVV deve ter 3 dígitos' }
       });
       expect(validator(new FormControl('12a'))).toEqual({
-        cvv: { message: 'CVV deve ter 3 ou 4 dígitos' }
+        cvv: { message: 'CVV deve ter 3 dígitos' }
       });
     });
   });
@@ -76,7 +78,7 @@ describe('CardValidators', () => {
     it('should reject single name', () => {
       const validator = CardValidators.cardHolder();
       expect(validator(new FormControl('Maria'))).toEqual({
-        cardHolder: { message: 'Informe nome e sobrenome como no cartão' }
+        cardHolder: { message: 'Informe nome e sobrenome igual está escrito no cartão' }
       });
     });
 

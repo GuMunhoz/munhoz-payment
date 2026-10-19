@@ -84,12 +84,3 @@ export interface PaymentErrorResponse {
 export interface SimulatorState {
   mode: SimulatorMode;
 }
-
-export interface PersistedState {
-  product: Product | null;
-  method: PaymentMethod;
-  status: PaymentStatus;
-  successData: PaymentSuccessResponse | null;
-  errorData: PaymentErrorResponse | null;
-  savedCardData?: Partial<PaymentCardDetails>;
-}

@@ -8,46 +8,20 @@ import {
   SimulatorMode,
   SimulatorState
 } from '../core/models/payment.models';
-
-const STORAGE_KEY = 'nexo_simulator_state';
+import { detectCardBrand } from '../shared/utils/payment.utils';
 
 const DEFAULT_STATE: SimulatorState = {
   mode: 'success'
 };
 
-const VALID_MODES: ReadonlySet<SimulatorMode> = new Set<SimulatorMode>(['success', 'error']);
-
-function loadStoredState(): SimulatorState {
-  try {
-    const mode = JSON.parse(sessionStorage.getItem(STORAGE_KEY) ?? 'null')?.mode;
-    return VALID_MODES.has(mode) ? { mode } : DEFAULT_STATE;
-  } catch {
-    return DEFAULT_STATE;
-  }
-}
-
-export const simulatorState = signal<SimulatorState>(loadStoredState());
+export const simulatorState = signal<SimulatorState>(DEFAULT_STATE);
 
 export function setSimulatorMode(mode: SimulatorMode): void {
-  saveState({ mode });
+  simulatorState.set({ mode });
 }
 
 export function resetSimulator(): void {
-  saveState(DEFAULT_STATE);
-}
-
-function saveState(state: SimulatorState): void {
-  simulatorState.set(state);
-  persistState(state);
-}
-
-/** Persistência é "best effort": se o storage estiver indisponível, o simulador segue só em memória. */
-function persistState(state: SimulatorState): void {
-  try {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch (error) {
-    console.warn('Simulador: não foi possível persistir o estado.', error);
-  }
+  simulatorState.set(DEFAULT_STATE);
 }
 
 type MockPaymentOutcome =
@@ -107,7 +81,7 @@ function getCardSummary(request: PaymentRequest): { cardLast4?: string; cardBran
 
   return {
     cardLast4: digits.length >= 4 ? digits.slice(-4) : FALLBACK_CARD_LAST4,
-    cardBrand: getCardBrand(digits)
+    cardBrand: detectCardBrand(digits) ?? 'Visa'
   };
 }
 
@@ -158,12 +132,4 @@ function getErrorDetails(
         ? 'Sua instituição financeira recusou a transação via Pix. Tente novamente ou use outro meio de pagamento.'
         : 'Seu banco recusou a transação. Verifique os dados e o limite disponível, ou use outro meio de pagamento.'
   };
-}
-
-function getCardBrand(number: string): string {
-  if (number.startsWith('4')) return 'Visa';
-  if (number.startsWith('5')) return 'Mastercard';
-  if (number.startsWith('34') || number.startsWith('37')) return 'Amex';
-  if (number.startsWith('6')) return 'Elo';
-  return 'Visa';
 }

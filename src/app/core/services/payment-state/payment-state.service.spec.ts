@@ -48,8 +48,6 @@ describe('PaymentStateService', () => {
   it('should initialize with default idle state', () => {
     expect(service.status()).toBe('idle');
     expect(service.method()).toBe('credit');
-    expect(service.isSuccess()).toBe(false);
-    expect(service.isError()).toBe(false);
   });
 
   it('should set product and method correctly', () => {
@@ -59,20 +57,18 @@ describe('PaymentStateService', () => {
     expect(service.method()).toBe('pix');
   });
 
-  it('should transition to success and verify isSuccess()', () => {
+  it('should transition to success', () => {
     service.setSuccess(mockSuccess);
     expect(service.status()).toBe('success');
-    expect(service.isSuccess()).toBe(true);
-    expect(service.isError()).toBe(false);
     expect(service.successData()?.transactionId).toBe('tx_123');
+    expect(service.errorData()).toBeNull();
   });
 
-  it('should transition to error and verify isError()', () => {
+  it('should transition to error', () => {
     service.setError(mockError);
     expect(service.status()).toBe('error');
-    expect(service.isError()).toBe(true);
-    expect(service.isSuccess()).toBe(false);
     expect(service.errorData()?.code).toBe('CARD_DECLINED');
+    expect(service.successData()).toBeNull();
   });
 
   it('should reset error on retryPayment', () => {

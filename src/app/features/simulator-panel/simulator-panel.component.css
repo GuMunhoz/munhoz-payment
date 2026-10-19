@@ -1,6 +1,6 @@
 .simulator-container {
   position: fixed;
-  bottom: 20px;
+  bottom: 72px;
   right: 20px;
   z-index: 9999;
 }
@@ -47,7 +47,7 @@
 
 .simulator-popover {
   position: fixed;
-  bottom: 68px;
+  bottom: 120px;
   right: 20px;
   width: 340px;
   max-width: calc(100vw - 40px);

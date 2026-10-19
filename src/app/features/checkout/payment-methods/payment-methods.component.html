@@ -50,9 +50,16 @@
         {{ selectedMethod() === 'credit' ? 'Cartão de crédito' : 'Cartão de débito' }}
       </span>
       <div class="card-brands d-flex gap-2">
-        <span class="badge bg-light text-muted border">Visa</span>
-        <span class="badge bg-light text-muted border">Mastercard</span>
-        <span class="badge bg-light text-muted border">Elo</span>
+        @for (brand of ['Visa', 'Mastercard', 'Elo']; track brand) {
+          <span
+            class="badge"
+            [class.brand-active]="detectedBrand === brand"
+            [class.bg-light]="detectedBrand !== brand"
+            [class.text-muted]="detectedBrand !== brand"
+          >
+            {{ brand }}
+          </span>
+        }
       </div>
     </div>
 
@@ -95,7 +102,7 @@
         />
         @if (isFieldInvalid('holderName')) {
           <div class="invalid-feedback d-block small">
-            {{ cardForm.controls['holderName'].errors?.['cardHolder']?.message || 'Informe nome e sobrenome como no cartão.' }}
+            {{ cardForm.controls['holderName'].errors?.['cardHolder']?.message || 'Informe nome e sobrenome igual está escrito no cartão.' }}
           </div>
         }
       </div>
@@ -125,14 +132,14 @@
           <label class="form-label small fw-semibold" for="cvv">CVV</label>
           <div class="input-group">
             <input
-              type="password"
+              type="text"
               id="cvv"
               class="form-control"
               [class.is-invalid]="isFieldInvalid('cvv')"
               formControlName="cvv"
               placeholder="123"
               appCardMask="cvv"
-              maxlength="4"
+              maxlength="3"
             />
             <span class="input-group-text bg-white text-muted">
               <i class="bi bi-lock-fill"></i>

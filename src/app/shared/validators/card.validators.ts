@@ -6,35 +6,25 @@ export class CardValidators {
    */
   static luhn(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const raw = (control.value || '').toString().replace(/\D/g, '');
+      const digits = (control.value ?? '').toString().replace(/\D/g, '');
+      if (!digits) return { required: true };
 
-      if (!raw) {
-        return { required: true };
-      }
-
-      if (raw.length < 13 || raw.length > 19) {
+      if (digits.length < 13 || digits.length > 19) {
         return { luhn: { message: 'Número de cartão deve ter entre 13 e 19 dígitos' } };
       }
 
-      let sum = 0;
-      let shouldDouble = false;
-
-      for (let i = raw.length - 1; i >= 0; i--) {
-        let digit = parseInt(raw.charAt(i), 10);
-
-        if (shouldDouble) {
-          digit *= 2;
-          if (digit > 9) {
-            digit -= 9;
+      const sum = [...digits]
+        .reverse()
+        .reduce((acc, char, idx) => {
+          let digit = +char;
+          if (idx % 2 === 1) {
+            digit *= 2;
+            if (digit > 9) digit -= 9;
           }
-        }
+          return acc + digit;
+        }, 0);
 
-        sum += digit;
-        shouldDouble = !shouldDouble;
-      }
-
-      const isValid = sum % 10 === 0;
-      return isValid ? null : { luhn: { message: 'Número de cartão inválido' } };
+      return sum % 10 === 0 ? null : { luhn: { message: 'Número de cartão inválido' } };
     };
   }
 
@@ -43,24 +33,14 @@ export class CardValidators {
    */
   static expiration(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const value = (control.value || '').toString().trim();
+      const value = (control.value ?? '').toString().trim();
+      if (!value) return { required: true };
 
-      if (!value) {
-        return { required: true };
-      }
+      const match = value.match(/^(0[1-9]|1[0-2])\/?(\d{2}|\d{4})$/);
+      if (!match) return { expiration: { message: 'Formato deve ser MM/AA' } };
 
-      const regex = /^(0[1-9]|1[0-2])\/?([0-9]{2}|[0-9]{4})$/;
-      const match = value.match(regex);
-
-      if (!match) {
-        return { expiration: { message: 'Formato deve ser MM/AA' } };
-      }
-
-      const month = parseInt(match[1], 10);
-      let year = parseInt(match[2], 10);
-      if (year < 100) {
-        year += 2000;
-      }
+      const month = +match[1];
+      const year = +match[2] + (match[2].length === 2 ? 2000 : 0);
 
       const now = new Date();
       const currentYear = now.getFullYear();
@@ -79,18 +59,14 @@ export class CardValidators {
   }
 
   /**
-   * Validates CVV (3 or 4 numeric digits)
+   * Validates CVV (3 numeric digits)
    */
   static cvv(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const value = (control.value || '').toString().trim();
+      const value = (control.value ?? '').toString().trim();
+      if (!value) return { required: true };
 
-      if (!value) {
-        return { required: true };
-      }
-
-      const isValid = /^\d{3,4}$/.test(value);
-      return isValid ? null : { cvv: { message: 'CVV deve ter 3 ou 4 dígitos' } };
+      return /^\d{3}$/.test(value) ? null : { cvv: { message: 'CVV deve ter 3 dígitos' } };
     };
   }
 
@@ -99,15 +75,11 @@ export class CardValidators {
    */
   static cardHolder(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const value = (control.value || '').toString().trim();
+      const value = (control.value ?? '').toString().trim();
+      if (!value) return { required: true };
 
-      if (!value) {
-        return { required: true };
-      }
-
-      const parts = value.split(/\s+/).filter((p: string) => p.length > 0);
-      if (parts.length < 2) {
-        return { cardHolder: { message: 'Informe nome e sobrenome como no cartão' } };
+      if (!value.includes(' ')) {
+        return { cardHolder: { message: 'Informe nome e sobrenome igual está escrito no cartão' } };
       }
 
       if (/[0-9!@#$%^&*(),.?":{}|<>]/.test(value)) {
