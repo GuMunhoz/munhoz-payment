@@ -14,6 +14,7 @@ import { StepperComponent } from '../../../shared/components/stepper/stepper.com
 export class SuccessComponent {
   private readonly router = inject(Router);
   readonly paymentState = inject(PaymentStateService);
+  readonly steps = ['Produto', 'Pagamento', 'Confirmação'];
 
   readonly successData = this.paymentState.successData;
   readonly product = this.paymentState.product;

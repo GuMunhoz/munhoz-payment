@@ -30,6 +30,7 @@ export class CheckoutComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly paymentService = inject(PaymentService);
   readonly paymentState = inject(PaymentStateService);
+  readonly steps = ['Produto', 'Pagamento', 'Confirmação'];
 
   readonly product = signal<Product | null>(null);
   readonly isLoadingProduct = signal(true);

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 
-export type StepperState = 'checkout' | 'success' | 'error';
+export type StepStatus = 'completed' | 'active' | 'pending';
 
 @Component({
   selector: 'app-stepper',
@@ -11,6 +11,14 @@ export type StepperState = 'checkout' | 'success' | 'error';
   styleUrls: ['./stepper.component.css']
 })
 export class StepperComponent {
-  @Input() currentStep: 1 | 2 | 3 = 2;
-  @Input() state: StepperState = 'checkout';
+  @Input() steps: string[] = [];
+  @Input() currentStep = 1;
+  @Input() allCompleted = false;
+
+  getStatus(index: number): StepStatus {
+    const step = index + 1;
+    if (this.allCompleted || step < this.currentStep) return 'completed';
+    if (step === this.currentStep) return 'active';
+    return 'pending';
+  }
 }
