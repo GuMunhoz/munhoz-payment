@@ -16,7 +16,6 @@ describe('PaymentResultGuards', () => {
   let dummyState: RouterStateSnapshot;
 
   beforeEach(() => {
-    sessionStorage.clear();
     TestBed.configureTestingModule({});
     paymentState = TestBed.inject(PaymentStateService);
     router = TestBed.inject(Router);

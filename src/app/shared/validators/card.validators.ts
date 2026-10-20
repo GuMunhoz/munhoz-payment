@@ -10,7 +10,7 @@ export class CardValidators {
       if (!digits) return { required: true };
 
       if (digits.length < 13 || digits.length > 19) {
-        return { luhn: { message: 'Número de cartão deve ter entre 13 e 19 dígitos' } };
+        return { luhn: { message: 'Número inválido. Confira os dígitos do cartão.' } };
       }
 
       const sum = [...digits]
@@ -24,7 +24,7 @@ export class CardValidators {
           return acc + digit;
         }, 0);
 
-      return sum % 10 === 0 ? null : { luhn: { message: 'Número de cartão inválido' } };
+      return sum % 10 === 0 ? null : { luhn: { message: 'Número inválido. Confira os dígitos do cartão.' } };
     };
   }
 
@@ -47,7 +47,7 @@ export class CardValidators {
       const currentMonth = now.getMonth() + 1;
 
       if (year < currentYear || (year === currentYear && month < currentMonth)) {
-        return { expired: { message: 'Cartão vencido' } };
+        return { expired: { message: 'Cartão vencido.' } };
       }
 
       if (year > currentYear + 25) {
@@ -59,14 +59,14 @@ export class CardValidators {
   }
 
   /**
-   * Validates CVV (3 numeric digits)
+   * Validates CVV (3 or 4 numeric digits)
    */
   static cvv(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = (control.value ?? '').toString().trim();
       if (!value) return { required: true };
 
-      return /^\d{3}$/.test(value) ? null : { cvv: { message: 'CVV deve ter 3 dígitos' } };
+      return /^\d{3,4}$/.test(value) ? null : { cvv: { message: 'Use 3 ou 4 dígitos.' } };
     };
   }
 
@@ -79,11 +79,11 @@ export class CardValidators {
       if (!value) return { required: true };
 
       if (!value.includes(' ')) {
-        return { cardHolder: { message: 'Informe nome e sobrenome igual está escrito no cartão' } };
+        return { cardHolder: { message: 'Informe o nome como aparece no cartão.' } };
       }
 
       if (/[0-9!@#$%^&*(),.?":{}|<>]/.test(value)) {
-        return { cardHolder: { message: 'Nome não deve conter números ou símbolos' } };
+        return { cardHolder: { message: 'Informe o nome como aparece no cartão.' } };
       }
 
       return null;

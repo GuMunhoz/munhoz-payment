@@ -15,14 +15,14 @@ describe('CardValidators', () => {
     it('should invalidate invalid card numbers', () => {
       const validator = CardValidators.luhn();
       expect(validator(new FormControl('4242424242424241'))).toEqual({
-        luhn: { message: 'Número de cartão inválido' }
+        luhn: { message: 'Número inválido. Confira os dígitos do cartão.' }
       });
     });
 
     it('should invalidate too short or too long card numbers', () => {
       const validator = CardValidators.luhn();
       expect(validator(new FormControl('12345'))).toEqual({
-        luhn: { message: 'Número de cartão deve ter entre 13 e 19 dígitos' }
+        luhn: { message: 'Número inválido. Confira os dígitos do cartão.' }
       });
     });
   });
@@ -36,7 +36,7 @@ describe('CardValidators', () => {
     it('should reject expired date', () => {
       const validator = CardValidators.expiration();
       expect(validator(new FormControl('01/20'))).toEqual({
-        expired: { message: 'Cartão vencido' }
+        expired: { message: 'Cartão vencido.' }
       });
     });
 
@@ -49,21 +49,22 @@ describe('CardValidators', () => {
   });
 
   describe('cvv', () => {
-    it('should accept 3 digits', () => {
+    it('should accept 3 or 4 digits', () => {
       const validator = CardValidators.cvv();
       expect(validator(new FormControl('123'))).toBeNull();
+      expect(validator(new FormControl('1234'))).toBeNull();
     });
 
     it('should reject letters or wrong length', () => {
       const validator = CardValidators.cvv();
       expect(validator(new FormControl('12'))).toEqual({
-        cvv: { message: 'CVV deve ter 3 dígitos' }
+        cvv: { message: 'Use 3 ou 4 dígitos.' }
       });
-      expect(validator(new FormControl('1234'))).toEqual({
-        cvv: { message: 'CVV deve ter 3 dígitos' }
+      expect(validator(new FormControl('12345'))).toEqual({
+        cvv: { message: 'Use 3 ou 4 dígitos.' }
       });
       expect(validator(new FormControl('12a'))).toEqual({
-        cvv: { message: 'CVV deve ter 3 dígitos' }
+        cvv: { message: 'Use 3 ou 4 dígitos.' }
       });
     });
   });
@@ -78,14 +79,14 @@ describe('CardValidators', () => {
     it('should reject single name', () => {
       const validator = CardValidators.cardHolder();
       expect(validator(new FormControl('Maria'))).toEqual({
-        cardHolder: { message: 'Informe nome e sobrenome igual está escrito no cartão' }
+        cardHolder: { message: 'Informe o nome como aparece no cartão.' }
       });
     });
 
     it('should reject numbers or symbols', () => {
       const validator = CardValidators.cardHolder();
       expect(validator(new FormControl('Maria 123'))).toEqual({
-        cardHolder: { message: 'Nome não deve conter números ou símbolos' }
+        cardHolder: { message: 'Informe o nome como aparece no cartão.' }
       });
     });
   });

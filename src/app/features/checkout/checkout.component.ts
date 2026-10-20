@@ -10,6 +10,7 @@ import {
 } from '../../core/models/payment.models';
 import { PaymentService } from '../../core/services/payment/payment.service';
 import { PaymentStateService } from '../../core/services/payment-state/payment-state.service';
+import { detectCardBrand } from '../../shared/utils/payment.utils';
 import { StepperComponent } from '../../shared/components/stepper/stepper.component';
 import { PaymentMethodsComponent } from './payment-methods/payment-methods.component';
 import { OrderSummaryComponent } from './order-summary/order-summary.component';
@@ -30,15 +31,33 @@ export class CheckoutComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly paymentService = inject(PaymentService);
   readonly paymentState = inject(PaymentStateService);
-  readonly steps = ['Produto', 'Pagamento', 'Confirmação'];
+  readonly steps = ['Pedido', 'Pagamento', 'Confirmação'];
 
   readonly product = signal<Product | null>(null);
   readonly isLoadingProduct = signal(true);
   readonly isProcessing = signal(false);
+  readonly currentPaymentPayload = signal<PaymentSubmitPayload | null>(null);
 
   readonly userCountText = computed(() => {
     const count = this.product()?.usersCount || 1;
     return `${count} ${count > 1 ? 'usuários' : 'usuário'}`;
+  });
+
+  readonly paymentMethodSummary = computed(() => {
+    const payload = this.currentPaymentPayload();
+    const method = payload?.method || this.paymentState.method() || 'credit';
+
+    if (method === 'pix') {
+      return 'Pix';
+    }
+
+    const card = payload?.card || this.paymentState.getCardData(method);
+    const digits = (card?.number ?? '').replace(/\D/g, '');
+    const brand = detectCardBrand(digits) || 'Visa';
+    const last4 = digits.slice(-4) || '4242';
+    const typeLabel = method === 'credit' ? 'Crédito' : 'Débito';
+
+    return `${typeLabel} · ${brand} •••• ${last4}`;
   });
 
   ngOnInit(): void {
@@ -63,6 +82,7 @@ export class CheckoutComponent implements OnInit {
     const prod = this.product();
     if (!prod) return;
 
+    this.currentPaymentPayload.set(payload);
     this.isProcessing.set(true);
     this.paymentState.startProcessing();
 

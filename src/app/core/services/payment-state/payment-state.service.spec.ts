@@ -39,7 +39,6 @@ describe('PaymentStateService', () => {
   };
 
   beforeEach(() => {
-    sessionStorage.clear();
     TestBed.configureTestingModule({});
     service = TestBed.inject(PaymentStateService);
     service.reset();

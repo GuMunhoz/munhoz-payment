@@ -15,7 +15,24 @@
   background-color: var(--color-bg-surface);
   color: var(--color-text-muted);
   border-radius: var(--radius-md);
-  padding: 12px 8px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  transition: all 0.2s ease-in-out;
+}
+
+.payment-tabs .method-tab-btn .bi {
+  line-height: 1;
+}
+
+.payment-tabs .method-radio {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-border-default);
+  background-color: var(--color-bg-surface);
   transition: all 0.2s ease-in-out;
 }
 
@@ -32,23 +49,52 @@
   box-shadow: 0 0 0 1px var(--color-primary);
 }
 
-.card-brands .badge {
-  font-size: 0.7rem;
-  font-weight: 600;
-  padding: 4px 8px;
-  border: 1px solid var(--color-border-default);
-  transition: all 0.2s ease-in-out;
+.payment-tabs .method-tab-btn.active .method-radio {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
 }
 
-.card-brands .badge.brand-active {
-  background-color: var(--color-primary-light);
-  color: var(--color-primary);
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 1px var(--color-primary);
+.card-brand-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  height: 24px;
+  padding: 0 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-subtle);
+  background-color: var(--color-bg-surface);
+}
+
+.brand-icon-img {
+  height: 14px;
+  width: auto;
+  display: block;
 }
 
 
 /* Pix styling */
+.pix-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  margin-bottom: 0.35rem;
+}
+
+.pix-desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  margin-bottom: 0;
+}
+
+.pix-label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-main);
+  margin-bottom: 0.5rem;
+}
+
 .pix-qr-wrapper {
   max-width: 180px;
 }
@@ -58,3 +104,4 @@
   height: auto;
   display: block;
 }
+

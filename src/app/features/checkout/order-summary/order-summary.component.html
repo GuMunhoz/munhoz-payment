@@ -17,13 +17,15 @@
 <!-- Visão Desktop (completa, lateral em telas a partir de 992px) -->
 <div class="order-summary-desktop d-none d-lg-block">
   <div class="card p-4 shadow-sm mb-3">
-    <h5 class="fw-bold mb-3 section-title">Resumo do pedido</h5>
+    <h5 class="fw-semibold mb-3 section-title">Resumo do pedido</h5>
 
     <!-- Product Header -->
-    <div class="d-flex align-items-center gap-3 mb-3 p-2 bg-light rounded">
-      <i class="bi bi-grid-fill nexo-logo-box"></i>
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <div class="nexo-logo-box">
+        <i class="bi bi-grid-fill"></i>
+      </div>
       <div>
-        <h6 class="fw-bold mb-0">{{ product()?.name }}</h6>
+        <h6 class="fw-semibold mb-0">{{ product()?.name }}</h6>
         <small class="text-muted text-xs">
           {{ product()?.billingPeriod }} · {{ userCountText() }}
         </small>
@@ -31,7 +33,7 @@
     </div>
 
     <!-- Features checkmarks -->
-    <ul class="list-unstyled mb-4 features-list">
+    <ul class="list-unstyled mb-3 features-list">
       @for (feature of product()?.features; track feature) {
         <li class="d-flex align-items-center gap-2 text-sm mb-2 text-muted">
           <i class="bi bi-check2 text-primary fw-bold fs-6"></i>
@@ -40,16 +42,16 @@
       }
     </ul>
 
-    <hr class="my-3" />
+    <hr class="my-2" />
 
     <!-- Price Breakdown -->
-    <div class="d-flex justify-content-between text-sm text-muted mb-2">
+    <div class="d-flex justify-content-between text-sm text-muted mb-2 pt-1">
       <span>Subtotal</span>
-      <span class="text-dark fw-medium">{{ product()?.price | currency:product()?.currency:'symbol':'1.2-2' }}</span>
+      <span class="text-dark fw-semibold">{{ product()?.price | currency:product()?.currency:'symbol':'1.2-2' }}</span>
     </div>
-    <div class="d-flex justify-content-between text-sm text-muted mb-3">
+    <div class="d-flex justify-content-between text-sm text-muted mb-2">
       <span>Taxas</span>
-      <span class="text-dark fw-medium">{{ 0 | currency:product()?.currency:'symbol':'1.2-2' }}</span>
+      <span class="text-dark fw-semibold">{{ 0 | currency:product()?.currency:'symbol':'1.2-2' }}</span>
     </div>
 
     <hr class="my-2" />
@@ -60,19 +62,19 @@
       <span class="fw-bold fs-4 text-dark">{{ product()?.price | currency:product()?.currency:'symbol':'1.2-2' }}</span>
     </div>
 
-    <p class="text-xs text-muted mb-0">
+    <p class="small text-muted mb-0">
       {{ product()?.renewalText }}
     </p>
   </div>
 
   <!-- Security note box -->
-  <div class="card flex-row align-items-start gap-3 p-3 shadow-sm">
-    <i class="bi bi-shield-check text-primary fs-3"></i>
+  <div class="d-flex align-items-start gap-2 pt-2 px-1">
+    <i class="bi bi-shield-check text-primary fs-5 mt-1"></i>
     <div>
-      <strong class="d-block fw-semibold text-sm">Seus dados estão protegidos</strong>
-      <small class="text-muted text-xs">
-        Pagamento processado pela Nexo. Não armazenamos os dados do seu cartão.
-      </small>
+      <span class="d-block fw-semibold text-sm text-dark">Seus dados estão protegidos</span>
+      <p class="text-muted text-xs mb-0">
+        Pagamento criptografado. Não armazenamos os dados do seu cartão.
+      </p>
     </div>
   </div>
 </div>

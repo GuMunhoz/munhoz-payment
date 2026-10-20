@@ -13,6 +13,8 @@ export class PaymentService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = environment.apiUrl;
 
+  readonly mockProcessingDelayMs = 4000; // 4 segundos (4000ms)
+
   getProduct(id: string = 'nexo-pro'): Observable<Product> {
     if (environment.useMock) {
       return of(MOCK_PRODUCT_NEXO_PRO).pipe(delay(400));
@@ -20,14 +22,14 @@ export class PaymentService {
     return this.http.get<Product>(`${this.apiUrl}/products/${id}`);
   }
 
-  processPayment(request: PaymentRequest): Observable<PaymentSuccessResponse> {
+  processPayment(request: PaymentRequest, delayMs: number = this.mockProcessingDelayMs): Observable<PaymentSuccessResponse> {
     if (environment.useMock) {
       const outcome = handleMockPayment(request, MOCK_PRODUCT_NEXO_PRO.price);
 
       if (outcome.success) {
-        return of(outcome.response).pipe(delay(1200));
+        return of(outcome.response).pipe(delay(delayMs));
       } else {
-        return timer(1200).pipe(
+        return timer(delayMs).pipe(
           mergeMap(() =>
             throwError(
               () =>

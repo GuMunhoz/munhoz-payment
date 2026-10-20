@@ -3,6 +3,7 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { PaymentStateService } from '../../../core/services/payment-state/payment-state.service';
 import { StepperComponent } from '../../../shared/components/stepper/stepper.component';
+import { formatPaymentMethodSummary } from '../../../shared/utils/payment.utils';
 
 @Component({
   selector: 'app-error',
@@ -14,20 +15,13 @@ import { StepperComponent } from '../../../shared/components/stepper/stepper.com
 export class ErrorComponent {
   private readonly router = inject(Router);
   readonly paymentState = inject(PaymentStateService);
-  readonly steps = ['Produto', 'Pagamento', 'Confirmação'];
+  readonly steps = ['Pedido', 'Pagamento', 'Confirmação'];
 
   readonly errorData = this.paymentState.errorData;
   readonly product = this.paymentState.product;
 
   getMethodFormatted(): string {
-    const data = this.errorData();
-    if (!data) return '';
-
-    if (data.method === 'pix') return 'Pix';
-
-    const typeLabel = data.method === 'credit' ? 'Crédito' : 'Débito';
-
-    return `${typeLabel} · ${data.cardBrand} •••• ${data.cardLast4}`;
+    return formatPaymentMethodSummary(this.errorData(), { pixLabel: 'Pix' });
   }
 
   retry(): void {

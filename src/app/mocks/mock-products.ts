@@ -10,7 +10,7 @@ export const MOCK_PRODUCT_NEXO_PRO: Product = {
   currency: 'BRL',
   summary: 'Falta só um passo para começar com o Nexo Pro.',
   features: [
-    'Acesso a todos recursos',
+    'Projetos e tarefas ilimitados',
     'Relatórios e automações',
     'Suporte prioritário'
   ],

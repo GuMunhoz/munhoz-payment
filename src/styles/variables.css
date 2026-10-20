@@ -19,6 +19,10 @@
   --color-danger-light: #fef2f2;
   --color-danger-border: #fecaca;
   --color-danger-text: #991b1b;
+  --color-danger-alert: #b91c1c;
+  --color-invalid-border: #fca5a5;
+  --color-invalid-border-focus: #f87171;
+  --color-invalid-bg: #fff8f8;
 
   --color-bg-page: #f8fafc;
   --color-bg-surface: #ffffff;
@@ -33,6 +37,18 @@
   --color-text-muted: #64748b;
   --color-text-subtle: #94a3b8;
   --color-text-inverse: #ffffff;
+
+  /* Button Disabled State */
+  --color-btn-disabled-bg: #e2e5ec;
+  --color-btn-disabled-text: #8a94a6;
+
+  /* Form Validation Hints */
+  --color-form-error-hint: #8a94a6;
+
+  /* Processing State */
+  --color-processing-circle-bg: #f0f2fe;
+  --color-processing-banner-bg: #eff2fe;
+  --color-processing-banner-text: #5a6578;
 
 
   --spacing-2xs: 4px;

@@ -68,13 +68,15 @@ export class PaymentStateService {
   chooseAnotherMethod(): void {
     this.retryPayment();
     this.methodSignal.set('credit');
-    this.clearUnsavedCards();
   }
 
   reset(): void {
-    this.chooseAnotherMethod();
+    this.statusSignal.set('idle');
     this.productSignal.set(null);
     this.successSignal.set(null);
+    this.errorSignal.set(null);
+    this.methodSignal.set('credit');
+    this.clearUnsavedCards();
   }
 
   private clearUnsavedCards(): void {

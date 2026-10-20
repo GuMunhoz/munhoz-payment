@@ -12,7 +12,7 @@ export class CardMaskDirective {
   private readonly masks: Record<MaskType, (digits: string) => string> = {
     cardNumber: (digits) => digits.substring(0, 19).replace(/(\d{4})(?=\d)/g, '$1 '),
     expiration: (digits) => digits.substring(0, 4).replace(/^(\d{2})(\d)/, '$1/$2'),
-    cvv: (digits) => digits.substring(0, 3)
+    cvv: (digits) => digits.substring(0, 4)
   };
 
   constructor(private readonly el: ElementRef<HTMLInputElement>) {}

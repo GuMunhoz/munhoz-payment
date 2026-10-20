@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { generateInstallments } from './payment.utils';
+import { formatPaymentMethodSummary, generateInstallments } from './payment.utils';
 
 describe('payment.utils', () => {
   it('should generate 12 installment options by default', () => {
@@ -21,4 +21,38 @@ describe('payment.utils', () => {
     const options = generateInstallments(100, 3);
     expect(options).toHaveLength(3);
   });
+
+  describe('formatPaymentMethodSummary', () => {
+    it('should format Pix correctly', () => {
+      expect(formatPaymentMethodSummary({ method: 'pix' })).toBe('Pix · À vista');
+      expect(formatPaymentMethodSummary({ method: 'pix' }, { pixLabel: 'Pix' })).toBe('Pix');
+    });
+
+    it('should format credit card with installments correctly', () => {
+      expect(
+        formatPaymentMethodSummary({
+          method: 'credit',
+          cardBrand: 'Visa',
+          cardLast4: '4242',
+          installments: 3
+        })
+      ).toBe('Crédito · Visa •••• 4242 · 3x');
+    });
+
+    it('should format debit card correctly', () => {
+      expect(
+        formatPaymentMethodSummary({
+          method: 'debit',
+          cardBrand: 'Mastercard',
+          cardLast4: '1234'
+        })
+      ).toBe('Débito · Mastercard •••• 1234');
+    });
+
+    it('should return empty string when data is empty', () => {
+      expect(formatPaymentMethodSummary(null)).toBe('');
+      expect(formatPaymentMethodSummary(undefined)).toBe('');
+    });
+  });
 });
+

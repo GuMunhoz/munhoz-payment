@@ -1,11 +1,28 @@
 
+:host {
+  display: block;
+  margin-top: auto;
+}
+
+.app-footer {
+  background-color: transparent;
+  border: none;
+  margin-top: 4.5rem;
+}
+
 .footer-link {
   color: var(--color-text-muted);
   text-decoration: none;
   transition: color 0.2s ease-in-out;
 }
 
+.footer-link-primary {
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
 .footer-link:hover {
   color: var(--color-primary);
   text-decoration: underline;
 }
+

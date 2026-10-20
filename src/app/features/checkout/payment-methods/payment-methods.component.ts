@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import {
   Component,
+  DestroyRef,
   EventEmitter,
   Input,
   OnChanges,
@@ -10,6 +11,7 @@ import {
   inject,
   signal
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormBuilder,
   FormGroup,
@@ -37,6 +39,7 @@ import { CardValidators } from '../../../shared/validators/card.validators';
 })
 export class PaymentMethodsComponent implements OnInit, OnChanges {
   private readonly fb = inject(FormBuilder);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly paymentState = inject(PaymentStateService);
 
   @Input() product: Product | null = null;
@@ -79,22 +82,56 @@ export class PaymentMethodsComponent implements OnInit, OnChanges {
       installments: [savedCard?.installments || 1],
       saveCard: [savedCard?.saveCard ?? true]
     });
+
+    this.cardForm.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((val) => {
+        if (this.selectedMethod() !== 'pix') {
+          this.paymentState.setCardData(
+            {
+              number: val.number || '',
+              holderName: val.holderName || '',
+              expiration: val.expiration || '',
+              installments: val.installments || 1,
+              saveCard: val.saveCard ?? true
+            },
+            this.selectedMethod()
+          );
+        }
+      });
   }
 
   selectMethod(method: PaymentMethod): void {
+    if (this.selectedMethod() !== 'pix' && this.cardForm) {
+      const current = this.cardForm.value;
+      this.paymentState.setCardData(
+        {
+          number: current.number || '',
+          holderName: current.holderName || '',
+          expiration: current.expiration || '',
+          installments: current.installments || 1,
+          saveCard: current.saveCard ?? true
+        },
+        this.selectedMethod()
+      );
+    }
+
     this.selectedMethod.set(method);
     this.paymentState.setMethod(method);
 
     if (method !== 'pix') {
       const savedCard = this.paymentState.getCardData(method);
-      this.cardForm.reset({
-        number: savedCard?.number || '',
-        holderName: savedCard?.holderName || '',
-        expiration: savedCard?.expiration || '',
-        cvv: '',
-        installments: savedCard?.installments || 1,
-        saveCard: savedCard?.saveCard ?? true
-      });
+      this.cardForm.reset(
+        {
+          number: savedCard?.number || '',
+          holderName: savedCard?.holderName || '',
+          expiration: savedCard?.expiration || '',
+          cvv: '',
+          installments: savedCard?.installments || 1,
+          saveCard: savedCard?.saveCard ?? true
+        },
+        { emitEvent: false }
+      );
     }
   }
 
@@ -138,6 +175,14 @@ export class PaymentMethodsComponent implements OnInit, OnChanges {
   isFieldInvalid(fieldName: string): boolean {
     const field = this.cardForm.get(fieldName);
     return !!(field && field.invalid && (field.dirty || field.touched));
+  }
+
+  get hasTouchedErrors(): boolean {
+    if (!this.cardForm || this.cardForm.valid) {
+      return false;
+    }
+    const controls = ['number', 'holderName', 'expiration', 'cvv'];
+    return controls.some((ctrlName) => this.isFieldInvalid(ctrlName));
   }
 
   get detectedBrand(): string | null {

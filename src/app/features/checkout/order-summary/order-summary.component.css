@@ -5,14 +5,14 @@
 
 /* Nexo Logo Box */
 .nexo-logo-box {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   flex-shrink: 0;
-  background-color: var(--color-primary);
-  color: var(--color-text-inverse);
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
+  font-size: 1.35rem;
 }

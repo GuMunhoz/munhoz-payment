@@ -1,13 +1,15 @@
 <div class="result-page py-4">
-  <!-- Stepper (All 3 steps complete) -->
-  <app-stepper [steps]="steps" [currentStep]="3" [allCompleted]="true"></app-stepper>
+  <div class="container-xl">
+    <!-- Stepper (All 3 steps complete) -->
+    <div class="mb-4">
+      <app-stepper [steps]="steps" [currentStep]="3" [allCompleted]="true"></app-stepper>
+    </div>
 
-  <div class="container-xl mt-3">
     <div class="row justify-content-center">
-      <div class="col-lg-6 col-md-8 col-12">
+      <div class="col-lg-8 col-md-10 col-12">
         <div class="card p-4 p-md-5 text-center shadow-sm result-card">
           <!-- Success Icon Circle -->
-          <div class="success-icon-wrapper mx-auto mb-3">
+          <div class="result-icon-wrapper success mx-auto mb-3">
             <i class="bi bi-check-lg"></i>
           </div>
 
@@ -63,31 +65,41 @@
             </div>
           </div>
 
+          <!-- Email receipt notice (Crédito ou Débito) -->
+          @if (successData()?.method === 'credit' || successData()?.method === 'debit') {
+            <div class="mb-4 text-muted text-xs">
+              <div>Enviamos o recibo para</div>
+              <div class="text-dark fw-medium">{{ getReceiptEmail() }}</div>
+            </div>
+          }
+
           <!-- Action buttons -->
-          <div class="d-flex flex-column flex-sm-row justify-content-center gap-2 mb-4">
+          <div class="d-flex flex-column flex-sm-row gap-3 w-100">
             <button
               type="button"
-              class="btn btn-primary px-4 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2"
+              class="btn btn-primary btn-action flex-fill fw-semibold d-flex align-items-center justify-content-center gap-2"
               (click)="goToHome()"
             >
-              <i class="bi bi-box-arrow-in-right"></i>
+              <i class="bi bi-arrow-right"></i>
               <span>Acessar meu espaço</span>
             </button>
             <button
               type="button"
-              class="btn btn-outline-secondary px-4 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2"
+              class="btn btn-outline-secondary btn-action btn-receipt flex-fill fw-semibold d-flex align-items-center justify-content-center gap-2"
               (click)="viewReceipt()"
             >
               <i class="bi bi-receipt"></i>
               <span>Ver recibo</span>
             </button>
           </div>
+        </div>
 
-          <!-- Next renewal note -->
-          <div class="text-muted text-xs">
+        <!-- Next renewal note (fora do container) -->
+        @if (successData()?.nextRenewalDate) {
+          <div class="text-muted text-xs text-center mt-3">
             Sua próxima renovação será em {{ successData()?.nextRenewalDate }}.
           </div>
-        </div>
+        }
       </div>
     </div>
   </div>

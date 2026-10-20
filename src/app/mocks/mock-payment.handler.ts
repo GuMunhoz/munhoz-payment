@@ -130,6 +130,6 @@ function getErrorDetails(
     message:
       method === 'pix'
         ? 'Sua instituição financeira recusou a transação via Pix. Tente novamente ou use outro meio de pagamento.'
-        : 'Seu banco recusou a transação. Verifique os dados e o limite disponível, ou use outro meio de pagamento.'
+        : 'Seu banco recusou esta transação. Confira os dados e o limite disponível ou use outro meio de pagamento.'
   };
 }

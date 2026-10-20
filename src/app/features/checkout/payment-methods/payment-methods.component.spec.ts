@@ -7,7 +7,6 @@ describe('PaymentMethodsComponent', () => {
   let fixture: ComponentFixture<PaymentMethodsComponent>;
 
   beforeEach(async () => {
-    sessionStorage.clear();
     await TestBed.configureTestingModule({
       imports: [PaymentMethodsComponent]
     }).compileComponents();
@@ -66,5 +65,24 @@ describe('PaymentMethodsComponent', () => {
 
     expect(emittedData).toBeTruthy();
     expect(emittedData.method).toBe('pix');
+  });
+
+  it('should have button enabled initially (hasTouchedErrors is false)', () => {
+    component.selectMethod('credit');
+    expect(component.hasTouchedErrors).toBe(false);
+  });
+
+  it('should disable button and show error hint when field is touched and invalid', () => {
+    component.selectMethod('credit');
+    const numberCtrl = component.cardForm.get('number');
+    numberCtrl?.setValue('1234');
+    numberCtrl?.markAsDirty();
+    expect(component.hasTouchedErrors).toBe(true);
+  });
+
+  it('should disable button and show error hint after submitting invalid form', () => {
+    component.selectMethod('credit');
+    component.onSubmit();
+    expect(component.hasTouchedErrors).toBe(true);
   });
 });

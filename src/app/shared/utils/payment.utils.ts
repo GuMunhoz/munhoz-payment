@@ -26,3 +26,25 @@ export function detectCardBrand(cardNumber: string): 'Visa' | 'Mastercard' | 'El
   if (digits.startsWith('6')) return 'Elo';
   return null;
 }
+
+export function formatPaymentMethodSummary(
+  data: {
+    method?: string;
+    cardBrand?: string;
+    cardLast4?: string;
+    installments?: number;
+  } | null | undefined,
+  options?: { pixLabel?: string }
+): string {
+  if (!data?.method) return '';
+  if (data.method === 'pix') return options?.pixLabel ?? 'Pix · À vista';
+
+  const typeLabel = data.method === 'credit' ? 'Crédito' : 'Débito';
+  const installmentsText =
+    data.method === 'credit' && data.installments && data.installments > 1
+      ? ` · ${data.installments}x`
+      : '';
+
+  return `${typeLabel} · ${data.cardBrand ?? ''} •••• ${data.cardLast4 ?? ''}${installmentsText}`.trim();
+}
+

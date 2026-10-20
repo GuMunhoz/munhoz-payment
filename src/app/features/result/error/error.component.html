@@ -1,13 +1,15 @@
 <div class="result-page py-4">
-  <!-- Stepper (Step 2 Alert/Active) -->
-  <app-stepper [steps]="steps" [currentStep]="2"></app-stepper>
+  <div class="container-xl">
+    <!-- Stepper (Step 2 Alert/Active) -->
+    <div class="mb-4">
+      <app-stepper [steps]="steps" [currentStep]="2"></app-stepper>
+    </div>
 
-  <div class="container-xl mt-3">
     <div class="row justify-content-center">
-      <div class="col-lg-6 col-md-8 col-12">
+      <div class="col-lg-8 col-md-10 col-12">
         <div class="card p-4 p-md-5 text-center shadow-sm result-card">
           <!-- Error Icon Circle -->
-          <div class="error-icon-wrapper mx-auto mb-3">
+          <div class="result-icon-wrapper error mx-auto mb-3">
             <i class="bi bi-exclamation-lg"></i>
           </div>
 
@@ -20,10 +22,10 @@
           <!-- Error Alert Callout -->
           <div class="error-alert-box p-3 rounded mb-4 text-start">
             <div class="d-flex align-items-start gap-2">
-              <i class="bi bi-x-circle-fill text-danger fs-5 mt-1"></i>
+              <i class="bi bi-exclamation-circle error-alert-icon mt-1"></i>
               <div>
-                <strong class="d-block text-danger">{{ errorData()?.title }}</strong>
-                <p class="mb-0 text-muted small mt-1">
+                <strong class="d-block error-alert-title">{{ errorData()?.title }}</strong>
+                <p class="mb-0 error-alert-message mt-1">
                   {{ errorData()?.message }}
                 </p>
               </div>
@@ -65,10 +67,10 @@
           </div>
 
           <!-- Action buttons -->
-          <div class="d-flex flex-column flex-sm-row justify-content-center gap-2 mb-3">
+          <div class="d-flex flex-column flex-sm-row gap-3 w-100 mb-4">
             <button
               type="button"
-              class="btn btn-primary px-4 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2"
+              class="btn btn-primary btn-action flex-fill fw-semibold d-flex align-items-center justify-content-center gap-2"
               (click)="retry()"
             >
               <i class="bi bi-arrow-clockwise"></i>
@@ -76,7 +78,7 @@
             </button>
             <button
               type="button"
-              class="btn btn-outline-secondary px-4 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2"
+              class="btn btn-outline-secondary btn-action btn-action-outline flex-fill fw-semibold d-flex align-items-center justify-content-center gap-2"
               (click)="chooseAnotherMethod()"
             >
               <i class="bi bi-wallet2"></i>
@@ -85,17 +87,17 @@
           </div>
 
           <!-- Helper tip -->
-          <div class="text-muted text-xs mb-4">
+          <div class="text-muted text-xs">
             Você pode pagar com outro cartão ou escolher Pix.
           </div>
+        </div>
 
-          <!-- Support link -->
-          <div class="pt-2 border-top">
-            <a href="javascript:void(0)" class="small text-muted d-inline-flex align-items-center gap-1">
-              <i class="bi bi-chat-dots"></i>
-              <span>Ainda precisa de ajuda? Fale com a gente</span>
-            </a>
-          </div>
+        <!-- Support link (fora do container) -->
+        <div class="text-center mt-3">
+          <a href="javascript:void(0)" class="support-help-link d-inline-flex align-items-center gap-2">
+            <i class="bi bi-chat"></i>
+            <span>Ainda precisa de ajuda? Fale com a gente</span>
+          </a>
         </div>
       </div>
     </div>

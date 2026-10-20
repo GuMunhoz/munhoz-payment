@@ -44,7 +44,7 @@ describe('PaymentService', () => {
     };
 
     return new Promise<void>((resolve) => {
-      service.processPayment(request).subscribe({
+      service.processPayment(request, 50).subscribe({
         next: (response) => {
           expect(response).toBeTruthy();
           expect(response.status).toBe('success');
