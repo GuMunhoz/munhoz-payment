@@ -1,6 +1,6 @@
 # Munhoz Payment 💳
 
-Aplicação web desenvolvida em **Angular** para fluxo e processamento de pagamentos, com interface responsiva e componentes interativos.
+Aplicação web desenvolvida em **Angular 22** (`v22.2.x`) para fluxo e processamento de pagamentos, com interface responsiva e componentes interativos.
 
 ---
 
@@ -9,9 +9,9 @@ Aplicação web desenvolvida em **Angular** para fluxo e processamento de pagame
 Siga os passos abaixo para executar a aplicação localmente:
 
 ### Pré-requisitos
-- [Node.js](https://nodejs.org/) (versão LTS recomendada, v18+ ou superior)
-- [npm](https://www.npmjs.com/) (gerenciador de pacotes)
-- [Angular CLI](https://angular.dev/tools/cli) (opcional, pode ser instalado globalmente via `npm install -g @angular/cli`)
+- **[Node.js](https://nodejs.org/)**: Versão `22.x` (LTS recomendada) ou `24.x`
+- **[npm](https://www.npmjs.com/)**: Versão `10.x` ou `11.x` (utilizada no projeto: `npm@11.12.1`)
+- **[Angular CLI](https://angular.dev/tools/cli)**: Versão `22.x` (opcional globalmente via `npm install -g @angular/cli@22`)
 
 ### 1. Clonar o repositório
 ```bash
