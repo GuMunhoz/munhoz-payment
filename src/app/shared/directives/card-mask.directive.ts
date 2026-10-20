@@ -7,7 +7,14 @@ export type MaskType = 'cardNumber' | 'expiration' | 'cvv';
   standalone: true
 })
 export class CardMaskDirective {
-  @Input('appCardMask') maskType: MaskType = 'cardNumber';
+  @Input('appCardMask')
+  set maskType(value: MaskType | '' | undefined) {
+    this._maskType = value || 'cardNumber';
+  }
+  get maskType(): MaskType {
+    return this._maskType;
+  }
+  private _maskType: MaskType = 'cardNumber';
 
   private readonly masks: Record<MaskType, (digits: string) => string> = {
     cardNumber: (digits) => digits.substring(0, 19).replace(/(\d{4})(?=\d)/g, '$1 '),

@@ -28,6 +28,6 @@ describe('FooterComponent', () => {
   it('should render footer links', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const links = compiled.querySelectorAll('.footer-link');
-    expect(links.length).toBe(3);
+    expect(links).toHaveLength(3);
   });
 });

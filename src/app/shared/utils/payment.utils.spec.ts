@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatPaymentMethodSummary, generateInstallments } from './payment.utils';
+import { formatPaymentMethodSummary, generateInstallments, getPaymentMethodDisplay } from './payment.utils';
 
 describe('payment.utils', () => {
   it('should generate 12 installment options by default', () => {
@@ -52,6 +52,35 @@ describe('payment.utils', () => {
     it('should return empty string when data is empty', () => {
       expect(formatPaymentMethodSummary(null)).toBe('');
       expect(formatPaymentMethodSummary(undefined)).toBe('');
+    });
+  });
+
+  describe('getPaymentMethodDisplay', () => {
+    it('should return Pix for pix method', () => {
+      expect(getPaymentMethodDisplay({ method: 'pix' })).toBe('Pix');
+    });
+
+    it('should format credit card with detected brand and last digits', () => {
+      expect(
+        getPaymentMethodDisplay({
+          method: 'credit',
+          card: { number: '4242 4242 4242 4242' }
+        })
+      ).toBe('Crédito · Visa •••• 4242');
+    });
+
+    it('should format debit card with detected brand and last digits', () => {
+      expect(
+        getPaymentMethodDisplay({
+          method: 'debit',
+          card: { number: '5555 4444 3333 1234' }
+        })
+      ).toBe('Débito · Mastercard •••• 1234');
+    });
+
+    it('should use safe fallbacks when card details are missing', () => {
+      expect(getPaymentMethodDisplay(null)).toBe('Crédito · Visa •••• 4242');
+      expect(getPaymentMethodDisplay(null, 'debit')).toBe('Débito · Visa •••• 4242');
     });
   });
 });

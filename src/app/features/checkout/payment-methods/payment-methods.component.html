@@ -1,9 +1,7 @@
 <div class="card p-4 shadow-sm main-payment-card">
   <h5 class="fw-bold mb-3 section-title">Como você quer pagar?</h5>
 
-  <!-- Payment Method Tabs -->
   <div class="row g-2 mb-4 payment-tabs">
-    <!-- Crédito -->
     <div class="col-4">
       <button
         type="button"
@@ -19,7 +17,6 @@
       </button>
     </div>
 
-    <!-- Débito -->
     <div class="col-4">
       <button
         type="button"
@@ -35,7 +32,6 @@
       </button>
     </div>
 
-    <!-- Pix -->
     <div class="col-4">
       <button
         type="button"
@@ -52,7 +48,6 @@
     </div>
   </div>
 
-  <!-- Content for Credit or Debit Card -->
   @if (selectedMethod() === 'credit' || selectedMethod() === 'debit') {
     <div class="card-method-header d-flex justify-content-between align-items-center mb-3">
       <span class="fw-bold small">
@@ -70,7 +65,6 @@
     </div>
 
     <form [formGroup]="cardForm" (ngSubmit)="onSubmit()" novalidate>
-      <!-- Card Number -->
       <div class="mb-3">
         <label class="form-label small fw-medium" for="cardNumber">Número do cartão</label>
         <div class="input-with-icon">
@@ -94,7 +88,6 @@
         }
       </div>
 
-      <!-- Holder Name -->
       <div class="mb-3">
         <label class="form-label small fw-medium" for="holderName">Nome no cartão</label>
         <input
@@ -113,7 +106,6 @@
         }
       </div>
 
-      <!-- Expiration and CVV Row -->
       <div class="row g-3 mb-3">
         <div class="col-6">
           <label class="form-label small fw-medium" for="expiration">Validade</label>
@@ -166,7 +158,6 @@
         </div>
       }
 
-      <!-- Installments (Crédito only) -->
       @if (selectedMethod() === 'credit') {
         <div class="mb-3">
           <label class="form-label small fw-medium" for="installments">Parcelamento</label>
@@ -178,7 +169,6 @@
         </div>
       }
 
-      <!-- Save Card Checkbox -->
       <div class="form-check mb-4">
         <input
           class="form-check-input"
@@ -191,7 +181,6 @@
         </label>
       </div>
 
-      <!-- Submit Button -->
       <button
         type="submit"
         class="btn btn-primary w-100 py-3 fw-semibold d-flex align-items-center justify-content-center gap-2 mb-2 submit-pay-btn"
@@ -208,13 +197,11 @@
           Corrija os campos destacados para continuar.
         </div>
       } @else {
-        <!-- Legal notice -->
         <div class="text-center text-xs text-muted mb-2">
           Ao confirmar, você concorda com os Termos de serviço e a Política de privacidade.
         </div>
       }
 
-      <!-- Debit specific note -->
       @if (selectedMethod() === 'debit') {
         <div class="alert alert-light border small text-muted d-flex align-items-center gap-2 mt-3 mb-0">
           <i class="bi bi-info-circle text-primary"></i>
@@ -224,7 +211,6 @@
     </form>
   }
 
-  <!-- Content for Pix -->
   @if (selectedMethod() === 'pix') {
     <div class="pix-panel text-center py-2">
       <div class="pix-header text-start mb-3">
@@ -234,7 +220,6 @@
         </p>
       </div>
 
-      <!-- Simulated QR Code SVG -->
       <div class="pix-qr-wrapper p-3 d-inline-block bg-white rounded border shadow-sm my-3">
         <svg
           class="pix-qr-svg"
@@ -243,9 +228,7 @@
           height="160"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <!-- Background -->
           <rect width="160" height="160" fill="white" />
-          <!-- Positioning squares -->
           <rect x="10" y="10" width="40" height="40" fill="#0f172a" rx="4" />
           <rect x="18" y="18" width="24" height="24" fill="white" rx="2" />
           <rect x="24" y="24" width="12" height="12" fill="#0f172a" rx="1" />
@@ -258,7 +241,6 @@
           <rect x="18" y="118" width="24" height="24" fill="white" rx="2" />
           <rect x="24" y="124" width="12" height="12" fill="#0f172a" rx="1" />
 
-          <!-- Decorative mock data dots -->
           <rect x="60" y="15" width="8" height="8" fill="#4f46e5" />
           <rect x="75" y="25" width="8" height="8" fill="#0f172a" />
           <rect x="90" y="15" width="8" height="8" fill="#0f172a" />
@@ -279,7 +261,6 @@
       </div>
       <div class="text-xs text-muted mb-3">QR Code simulado · sem valor de pagamento</div>
 
-      <!-- Copy & Paste Input -->
       <div class="mb-3 text-start">
         <label class="form-label pix-label" for="pixCode">Pix copia e cola</label>
         <div class="input-group">
@@ -306,7 +287,6 @@
         }
       </div>
 
-      <!-- Copy Button Large -->
       <button
         type="button"
         class="btn btn-outline-secondary w-100 py-2 mb-3 fw-semibold small d-flex align-items-center justify-content-center gap-2"
@@ -316,7 +296,6 @@
         <span>{{ pixCopied() ? 'Código copiado!' : 'Copiar código Pix' }}</span>
       </button>
 
-      <!-- Complete Pix Payment -->
       <button
         type="button"
         class="btn btn-primary w-100 py-3 fw-semibold d-flex align-items-center justify-content-center gap-2"

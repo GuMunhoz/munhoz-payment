@@ -10,7 +10,7 @@ import {
 } from '../../core/models/payment.models';
 import { PaymentService } from '../../core/services/payment/payment.service';
 import { PaymentStateService } from '../../core/services/payment-state/payment-state.service';
-import { detectCardBrand } from '../../shared/utils/payment.utils';
+import { getPaymentMethodDisplay } from '../../shared/utils/payment.utils';
 import { StepperComponent } from '../../shared/components/stepper/stepper.component';
 import { PaymentMethodsComponent } from './payment-methods/payment-methods.component';
 import { OrderSummaryComponent } from './order-summary/order-summary.component';
@@ -43,22 +43,15 @@ export class CheckoutComponent implements OnInit {
     return `${count} ${count > 1 ? 'usuários' : 'usuário'}`;
   });
 
-  readonly paymentMethodSummary = computed(() => {
-    const payload = this.currentPaymentPayload();
-    const method = payload?.method || this.paymentState.method() || 'credit';
-
-    if (method === 'pix') {
-      return 'Pix';
-    }
-
-    const card = payload?.card || this.paymentState.getCardData(method);
-    const digits = (card?.number ?? '').replace(/\D/g, '');
-    const brand = detectCardBrand(digits) || 'Visa';
-    const last4 = digits.slice(-4) || '4242';
-    const typeLabel = method === 'credit' ? 'Crédito' : 'Débito';
-
-    return `${typeLabel} · ${brand} •••• ${last4}`;
-  });
+  readonly paymentMethodSummary = computed(() =>
+    getPaymentMethodDisplay(
+      this.currentPaymentPayload() || {
+        method: this.paymentState.method(),
+        card: this.paymentState.getCardData(this.paymentState.method())
+      },
+      this.paymentState.method()
+    )
+  );
 
   ngOnInit(): void {
     this.loadProduct();

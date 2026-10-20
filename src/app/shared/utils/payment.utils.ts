@@ -1,4 +1,4 @@
-import { InstallmentOption } from '../../core/models/payment.models';
+import { InstallmentOption, PaymentMethod } from '../../core/models/payment.models';
 
 export function generateInstallments(
   price: number,
@@ -46,5 +46,22 @@ export function formatPaymentMethodSummary(
       : '';
 
   return `${typeLabel} · ${data.cardBrand ?? ''} •••• ${data.cardLast4 ?? ''}${installmentsText}`.trim();
+}
+
+export function getPaymentMethodDisplay(
+  payload?: { method?: string; card?: { number?: string; installments?: number } | null } | null,
+  fallbackMethod: PaymentMethod = 'credit'
+): string {
+  const method = (payload?.method || fallbackMethod) as PaymentMethod;
+  if (method === 'pix') {
+    return 'Pix';
+  }
+
+  const digits = (payload?.card?.number ?? '').replace(/\D/g, '');
+  const brand = detectCardBrand(digits) || 'Visa';
+  const last4 = digits.slice(-4) || '4242';
+  const typeLabel = method === 'credit' ? 'Crédito' : 'Débito';
+
+  return `${typeLabel} · ${brand} •••• ${last4}`;
 }
 

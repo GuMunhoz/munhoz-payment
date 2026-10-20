@@ -11,7 +11,7 @@
   width: 100%;
   border-radius: var(--radius-xl);
   border: 1px solid var(--color-border-subtle);
-  background: linear-gradient(180deg, #ffffff 0%, #fbfbfe 100%);
+  background: linear-gradient(180deg, var(--color-bg-surface) 0%, var(--color-bg-surface-soft) 100%);
   box-shadow: var(--shadow-lg);
 }
 
@@ -40,5 +40,5 @@
 
 .banner-btn:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md) !important;
+  box-shadow: var(--shadow-md);
 }

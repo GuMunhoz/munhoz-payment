@@ -26,6 +26,7 @@
 
   --color-bg-page: #f8fafc;
   --color-bg-surface: #ffffff;
+  --color-bg-surface-soft: #fbfbfe;
   --color-bg-muted: #f1f5f9;
   --color-bg-subtle: #f8fafc;
 
@@ -38,14 +39,11 @@
   --color-text-subtle: #94a3b8;
   --color-text-inverse: #ffffff;
 
-  /* Button Disabled State */
   --color-btn-disabled-bg: #e2e5ec;
   --color-btn-disabled-text: #8a94a6;
 
-  /* Form Validation Hints */
   --color-form-error-hint: #8a94a6;
 
-  /* Processing State */
   --color-processing-circle-bg: #f0f2fe;
   --color-processing-banner-bg: #eff2fe;
   --color-processing-banner-text: #5a6578;

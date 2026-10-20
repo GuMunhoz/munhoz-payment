@@ -1,6 +1,5 @@
 <div class="result-page py-4">
   <div class="container-xl">
-    <!-- Stepper (All 3 steps complete) -->
     <div class="mb-4">
       <app-stepper [steps]="steps" [currentStep]="3" [allCompleted]="true"></app-stepper>
     </div>
@@ -8,25 +7,21 @@
     <div class="row justify-content-center">
       <div class="col-lg-8 col-md-10 col-12">
         <div class="card p-4 p-md-5 text-center shadow-sm result-card">
-          <!-- Success Icon Circle -->
           <div class="result-icon-wrapper success mx-auto mb-3">
             <i class="bi bi-check-lg"></i>
           </div>
 
-          <!-- Main Title -->
           <h1 class="h3 fw-bold mb-2">Pagamento confirmado!</h1>
           <p class="text-muted small mb-3">
             Tudo certo{{ successData()?.customerName ? ', ' + successData()?.customerName : '' }}. Sua assinatura está ativa e seu espaço já está pronto para você.
           </p>
 
-          <!-- Active badge -->
           <div class="mb-4">
             <span class="badge active-badge py-2 px-3 fw-semibold">
               <i class="bi bi-check-circle-fill me-1"></i> Assinatura ativa
             </span>
           </div>
 
-          <!-- Receipt Details Card -->
           <div class="receipt-box p-3 p-md-4 rounded mb-4 text-start">
             <div class="d-flex align-items-center gap-3 mb-3">
               <div class="nexo-logo-box">
@@ -65,7 +60,6 @@
             </div>
           </div>
 
-          <!-- Email receipt notice (Crédito ou Débito) -->
           @if (successData()?.method === 'credit' || successData()?.method === 'debit') {
             <div class="mb-4 text-muted text-xs">
               <div>Enviamos o recibo para</div>
@@ -73,7 +67,6 @@
             </div>
           }
 
-          <!-- Action buttons -->
           <div class="d-flex flex-column flex-sm-row gap-3 w-100">
             <button
               type="button"
@@ -94,7 +87,6 @@
           </div>
         </div>
 
-        <!-- Next renewal note (fora do container) -->
         @if (successData()?.nextRenewalDate) {
           <div class="text-muted text-xs text-center mt-3">
             Sua próxima renovação será em {{ successData()?.nextRenewalDate }}.

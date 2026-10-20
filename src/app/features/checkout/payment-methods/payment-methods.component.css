@@ -9,7 +9,6 @@
   background: var(--color-bg-surface);
 }
 
-/* Method Tabs */
 .payment-tabs .method-tab-btn {
   border: 1.5px solid var(--color-border-default);
   background-color: var(--color-bg-surface);
@@ -72,8 +71,6 @@
   display: block;
 }
 
-
-/* Pix styling */
 .pix-title {
   font-size: 1.05rem;
   font-weight: 700;
@@ -104,4 +101,3 @@
   height: auto;
   display: block;
 }
-

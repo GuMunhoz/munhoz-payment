@@ -1,6 +1,5 @@
 @if (isMockEnabled) {
   <div class="simulator-container">
-    <!-- Floating trigger button -->
     <button
       type="button"
       class="simulator-trigger shadow"
@@ -13,7 +12,6 @@
       <strong>{{ getModeBadgeLabel() }}</strong>
     </button>
 
-    <!-- Panel popup / modal -->
     @if (isOpen()) {
       <button
         type="button"
@@ -36,7 +34,6 @@
             Selecione o resultado que o pagamento (Cartão ou Pix) terá ao ser enviado:
           </p>
 
-          <!-- Mode selector buttons -->
           <fieldset class="btn-group w-100 mb-3">
             <legend class="visually-hidden">Resultado simulado do pagamento</legend>
             <button
@@ -58,7 +55,7 @@
           </fieldset>
 
           @if (state().mode === 'error') {
-            <div class="error-reason-box p-2 mb-3 rounded border small">
+            <div class="error-reason-box p-2 mb-3 rounded small">
               <div class="text-muted fw-semibold mb-1">Comportamento da falha simulada:</div>
               <ul class="mb-0 ps-3 text-muted">
                 <li><strong>Crédito ou Pix:</strong> Pagamento recusado</li>

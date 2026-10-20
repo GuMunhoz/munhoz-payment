@@ -43,7 +43,6 @@
   background-color: var(--color-success);
 }
 
-/* Completed Step */
 .step-completed .step-indicator {
   background-color: var(--color-success-light);
   color: var(--color-success);
@@ -54,7 +53,6 @@
   color: var(--color-text-main);
 }
 
-/* Active Step */
 .step-active .step-indicator {
   background-color: var(--color-primary);
   color: var(--color-text-inverse);
@@ -66,7 +64,6 @@
   font-weight: 600;
 }
 
-/* Pending Step */
 .step-pending .step-indicator {
   background-color: var(--color-bg-muted);
   color: var(--color-text-subtle);

@@ -59,7 +59,6 @@ function buildSuccessResponse(request: PaymentRequest, amount: number): PaymentS
 }
 
 function buildErrorResponse(request: PaymentRequest, amount: number): PaymentErrorResponse {
-  // Débito -> Saldo insuficiente | Crédito ou Pix -> Recusado
   const reason: ErrorReason = request.method === 'debit' ? 'insufficient_funds' : 'declined';
 
   return {
@@ -73,7 +72,6 @@ function buildErrorResponse(request: PaymentRequest, amount: number): PaymentErr
   };
 }
 
-/** Dados do cartão exibidos nas telas de resultado (não se aplicam ao Pix). */
 function getCardSummary(request: PaymentRequest): { cardLast4?: string; cardBrand?: string } {
   if (request.method === 'pix') return {};
 
@@ -85,7 +83,6 @@ function getCardSummary(request: PaymentRequest): { cardLast4?: string; cardBran
   };
 }
 
-/** Primeiro nome do titular, capitalizado (ex.: "MARIA A ALMEIDA" -> "Maria"). */
 function getCustomerFirstName(request: PaymentRequest): string | undefined {
   const firstName = request.card?.holderName?.trim().split(/\s+/)[0];
   return firstName ? firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase() : undefined;
@@ -101,12 +98,10 @@ function pad2(value: number): string {
   return String(value).padStart(2, '0');
 }
 
-/** dd/MM/yyyy */
 function formatDate(date: Date): string {
   return `${pad2(date.getDate())}/${pad2(date.getMonth() + 1)}/${date.getFullYear()}`;
 }
 
-/** dd/MM/yyyy, HH:mm */
 function formatDateTime(date: Date): string {
   return `${formatDate(date)}, ${pad2(date.getHours())}:${pad2(date.getMinutes())}`;
 }

@@ -1,9 +1,7 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export class CardValidators {
-  /**
-   * Validates card number using the Luhn Algorithm (Mod 10)
-   */
+
   static luhn(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const digits = (control.value ?? '').toString().replace(/\D/g, '');
@@ -28,9 +26,6 @@ export class CardValidators {
     };
   }
 
-  /**
-   * Validates expiration date in MM/AA or MM/AAAA format and checks if it's in the future
-   */
   static expiration(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = (control.value ?? '').toString().trim();
@@ -58,9 +53,6 @@ export class CardValidators {
     };
   }
 
-  /**
-   * Validates CVV (3 or 4 numeric digits)
-   */
   static cvv(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = (control.value ?? '').toString().trim();
@@ -70,9 +62,6 @@ export class CardValidators {
     };
   }
 
-  /**
-   * Validates cardholder name (must have at least first and last name)
-   */
   static cardHolder(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = (control.value ?? '').toString().trim();

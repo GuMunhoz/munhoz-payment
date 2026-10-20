@@ -6,9 +6,7 @@ describe('CardValidators', () => {
   describe('luhn', () => {
     it('should validate valid card numbers (Luhn)', () => {
       const validator = CardValidators.luhn();
-      // Test Visa 4242 4242 4242 4242
       expect(validator(new FormControl('4242424242424242'))).toBeNull();
-      // Formatted with spaces
       expect(validator(new FormControl('4242 4242 4242 4242'))).toBeNull();
     });
 
